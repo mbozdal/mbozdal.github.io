@@ -16,9 +16,9 @@ A pacemaker is a good example of an embedded system that is implanted in the bod
 
 {% include figure.html path="assets/img/pacemaker.png" title="pacemaker"  %}
 
-[1] **[How does a pacemaker work?](https://www.bhf.org.uk/informationsupport/heart-matters-magazine/medical/how-does-a-pacemaker-work)**
+[1] [How does a pacemaker work?](https://www.bhf.org.uk/informationsupport/heart-matters-magazine/medical/how-does-a-pacemaker-work)
 
-[2] ****[Dual Chamber Pacemaker - Chest X-RAY](https://johnsonfrancis.org/professional/dual-chamber-pacemaker-chest-x-ray/)****
+[2] [Dual Chamber Pacemaker - Chest X-RAY](https://johnsonfrancis.org/professional/dual-chamber-pacemaker-chest-x-ray/)
 
 ### Learn Programming
 
@@ -28,10 +28,10 @@ It's important to note that embedded systems often run on bare metal, meaning th
 
 For additional resources, consider the following:
 
-- Learn how to choose the right embedded programming language through this informative post: [5 Recommendations for Selecting the Right Embedded Programming Language](https://www.beningo.com/5-recommendations-for-selecting-the-right-embedded-programming-langauge/)
-- Watch a video that clears up misconceptions about C/C++ vs. embedded C/C++: [What Actually is Embedded C/C++? Is it different from C/C++?](https://www.youtube.com/watch?v=KQBBWvY-s0o&ab_channel=JacobSorber)
+- Learn how to choose the right embedded programming language through this informative post:[5 Recommendations for Selecting the Right Embedded Programming Language](https://www.beningo.com/5-recommendations-for-selecting-the-right-embedded-programming-langauge/)
+- Watch a video that clears up misconceptions about C/C++ vs. embedded C/C++:[What Actually is Embedded C/C++? Is it different from C/C++?](https://www.youtube.com/watch?v=KQBBWvY-s0o&ab_channel=JacobSorber)
 
-### **Choose a development platform**
+### Choose a development platform
 
 A microcontroller serves as the heart of an embedded system. Selecting the right microcontroller is crucial in embedded systems development. A microcontroller serves as the heart of an embedded system, providing the processing power and control necessary for your project. Popular options include STM32, TI MSP430, Raspberry Pico, and Arduino, while open source RISC-V architecture is also gaining popularity, although it may be more suitable for experienced users.
 
@@ -41,7 +41,7 @@ An important part of specializing in embedded systems is being able to read and 
 
 To streamline the development process, it is often advantageous to purchase a development board. This enables you to focus on the coding aspect while providing the necessary hardware interface for testing and prototyping.
 
-**Get Hands-on Experience**
+### Get Hands-on Experience
 
 To fully grasp embedded systems, it's essential to gain hands-on experience with hardware components such as sensors, actuators, displays, and communication modules. Familiarize yourself with their specifications, interfaces, and protocols by exploring datasheets and reference manuals. As you delve into practical projects, start with small and simple tasks like blinking an LED or reading sensor data to solidify your understanding of the basics. Gradually progress to more challenging projects, leveraging experimentation and troubleshooting to learn valuable lessons along the way. Practical experience is key to mastering embedded systems.
 
