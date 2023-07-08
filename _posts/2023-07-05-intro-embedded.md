@@ -16,8 +16,6 @@ A pacemaker is a good example of an embedded system that is implanted in the bod
 
 {% include figure.html path="assets/img/pacemaker.png" title="example image"  %}
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/8ffd0eac-a155-4fbb-a32d-083927bf1f30/Untitled.png)
-
 [1] **[How does a pacemaker work?](https://www.bhf.org.uk/informationsupport/heart-matters-magazine/medical/how-does-a-pacemaker-work)**
 
 [2] ****[Dual Chamber Pacemaker - Chest X-RAY](https://johnsonfrancis.org/professional/dual-chamber-pacemaker-chest-x-ray/)****
