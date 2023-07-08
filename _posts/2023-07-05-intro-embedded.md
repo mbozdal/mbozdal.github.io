@@ -14,7 +14,7 @@ These systems are often concealed or "embedded" within the devices they power, s
 
 A pacemaker is a good example of an embedded system that is implanted in the body to regulate the heart's electrical activity. It is specifically engineered to operate reliably and autonomously within the body, demonstrating the remarkable capabilities of embedded technology in critical medical applications. Due to their internal placement, pacemakers must efficiently utilize power resources to ensure prolonged operation without the need for frequent battery replacements.
 
-{% include figure.html path="assets/img/pacemaker.png" title="example image"  %}
+{% include figure.html path="assets/img/pacemaker.png" title="pacemaker"  %}
 
 [1] **[How does a pacemaker work?](https://www.bhf.org.uk/informationsupport/heart-matters-magazine/medical/how-does-a-pacemaker-work)**
 
