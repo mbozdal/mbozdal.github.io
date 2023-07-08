@@ -14,12 +14,13 @@ These systems are often concealed or "embedded" within the devices they power, s
 
 A pacemaker is a good example of an embedded system that is implanted in the body to regulate the heart's electrical activity. It is specifically engineered to operate reliably and autonomously within the body, demonstrating the remarkable capabilities of embedded technology in critical medical applications. Due to their internal placement, pacemakers must efficiently utilize power resources to ensure prolonged operation without the need for frequent battery replacements.
 
-{% include figure.html path="assets/img/pacemaker.png" title="example image" class="img-fluid rounded z-depth-1" %}
+{% include figure.html path="assets/img/pacemaker.png" title="example image"  %}
 
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/8ffd0eac-a155-4fbb-a32d-083927bf1f30/Untitled.png)
 
-[1] [How does a pacemaker work?](https://www.bhf.org.uk/informationsupport/heart-matters-magazine/medical/how-does-a-pacemaker-work)
+[1] **[How does a pacemaker work?](https://www.bhf.org.uk/informationsupport/heart-matters-magazine/medical/how-does-a-pacemaker-work)**
 
-[2] [Dual Chamber Pacemaker - Chest X-RAY](https://johnsonfrancis.org/professional/dual-chamber-pacemaker-chest-x-ray/)
+[2] ****[Dual Chamber Pacemaker - Chest X-RAY](https://johnsonfrancis.org/professional/dual-chamber-pacemaker-chest-x-ray/)****
 
 ### Learn Programming
 
@@ -29,12 +30,20 @@ It's important to note that embedded systems often run on bare metal, meaning th
 
 For additional resources, consider the following:
 
-- Learn how to choose the right embedded programming language through this informative post:[5 Recommendations for Selecting the Right Embedded Programming Language](https://www.beningo.com/5-recommendations-for-selecting-the-right-embedded-programming-langauge/)
-- Watch a video that clears up misconceptions about C/C++ vs. embedded C/C++:[What Actually is Embedded C/C++? Is it different from C/C++?](https://www.youtube.com/watch?v=KQBBWvY-s0o&ab_channel=JacobSorber)
+- Learn how to choose the right embedded programming language through this informative post: [5 Recommendations for Selecting the Right Embedded Programming Language](https://www.beningo.com/5-recommendations-for-selecting-the-right-embedded-programming-langauge/)
+- Watch a video that clears up misconceptions about C/C++ vs. embedded C/C++: [What Actually is Embedded C/C++? Is it different from C/C++?](https://www.youtube.com/watch?v=KQBBWvY-s0o&ab_channel=JacobSorber)
 
-### Choose a Microcontroller and Get Hands-on Experience
+### **Choose a development platform**
 
-A microcontroller serves as the heart of an embedded system. Selecting the right microcontroller is crucial in embedded systems development. A microcontroller serves as the heart of an embedded system, providing the processing power and control necessary for your project. Popular microcontroller families include STM32, TI MSP430, Raspberry Pico, and Arduino. When choosing a microcontroller, consider your project requirements and explore different options before making a decision. For guidance in selecting a microcontroller, refer to the comprehensive guide: **[10 Steps to Selecting a Microcontroller](https://www.example.com/selecting-a-microcontroller)**.
+A microcontroller serves as the heart of an embedded system. Selecting the right microcontroller is crucial in embedded systems development. A microcontroller serves as the heart of an embedded system, providing the processing power and control necessary for your project. Popular options include STM32, TI MSP430, Raspberry Pico, and Arduino, while open source RISC-V architecture is also gaining popularity, although it may be more suitable for experienced users.
+
+When choosing a microcontroller, consider your project requirements and explore different options before making a decision. While Arduino is widely popular and easy to program, it abstracts the hardware details, making it harder to understand how things work. Instead, I recommended to choose an Arm microcontroller and programming it at a lower level using register-based programming. This gives you a better understanding of the hardware. It may be a bit challenging at first, but it helps you gain valuable insights into how the system functions. For guidance in selecting a microcontroller, refer to the comprehensive guide: **[10 Steps to Selecting a Microcontroller**.](https://community.arm.com/arm-community-blogs/b/embedded-blog/posts/10-steps-to-selecting-a-microcontroller)
+
+An important part of specializing in embedded systems is being able to read and understand datasheets, despite their potentially tedious nature. Datasheets provide important information about the microcontroller's features, pin configurations, and other specifications that help you make informed decisions when designing your system.
+
+To streamline the development process, it is often advantageous to purchase a development board. This enables you to focus on the coding aspect while providing the necessary hardware interface for testing and prototyping.
+
+**Get Hands-on Experience**
 
 To fully grasp embedded systems, it's essential to gain hands-on experience with hardware components such as sensors, actuators, displays, and communication modules. Familiarize yourself with their specifications, interfaces, and protocols by exploring datasheets and reference manuals. As you delve into practical projects, start with small and simple tasks like blinking an LED or reading sensor data to solidify your understanding of the basics. Gradually progress to more challenging projects, leveraging experimentation and troubleshooting to learn valuable lessons along the way. Practical experience is key to mastering embedded systems.
 
