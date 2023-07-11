@@ -47,7 +47,8 @@ To fully grasp embedded systems, it's essential to gain hands-on experience with
 
 Remember, learning embedded systems is a journey that requires dedication and continuous practice. Embrace challenges, seek knowledge, and enjoy the process of mastering this exciting field. Good luck on your embedded systems learning journey!
 
-Additional Resources:
+
+**Additional Resources:**
 
 - [Resources for beginners](https://embeddedartistry.com/beginners/)
 - [Modern Embedded Systems Programming Course](https://www.youtube.com/playlist?list=PLPW8O6W-1chwyTzI3BHwBLbGQoPFxPAPM)
