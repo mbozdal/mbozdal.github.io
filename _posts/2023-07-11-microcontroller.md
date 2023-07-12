@@ -4,15 +4,17 @@ title: What is a microcontroller?
 date: 2023-07-11 17:39:00
 description: A microcontroller, often abbreviated as MCU, is a compact computer system integrated into a single chip. 
 ---
+# What is a microcontroller?
+
 A microcontroller, often abbreviated as MCU, is a compact computer system integrated into a single chip. It combines various components, including a central processing unit (CPU), memory, and input/output peripherals, into a small and efficient package. 
 
 **Figure 1.** *System architecture of STM32F1x Series*
 
 {% include figure.html path="assets/img/system_architecture_stm32.png" title="System architecture of STM32F1x Series"  %}
 
-Figure 1 shows the system architecture of STM321x family MCUs. 
+Figure 1 shows the system architecture of STM321x family MCUs, the one we will use in the labs. Check the following components in the architecture.
 
-****Components of a Microcontroller:****
+**Components of a Microcontroller:**
 
 1. **CPU:** At the heart of the microcontroller is the central processing unit (CPU), which executes instructions and performs calculations. The CPU is responsible for the overall control and operation of the microcontroller.  STM321x series has Arm Cortex-M3 processors. 
 2. **Clock Source:** A microcontroller needs  the clock signal for synchronization and timing of operations within the microcontroller (it may have a built-in oscillator). The clock source determines the speed at which the CPU and other components operate. There are various clock sources you can configure under Reset & Clock Control subsystem.
