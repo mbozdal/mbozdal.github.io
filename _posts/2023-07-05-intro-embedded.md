@@ -3,6 +3,7 @@ layout: post
 title: A Beginner's Guide to Embedded Systems
 date: 2023-07-03 17:39:00
 description: This beginner's guide to embedded systems explains what they are, why they matter, and provides programming tips, guidance on choosing a microcontroller, and advice for getting hands-on experience.
+tag: embedded
 ---
 Embedded systems are an integral part of various technological advancements, including smart devices, wearables, autonomous vehicles, and industrial automation. As the popularity of these systems continues to grow, many students have expressed their interest in learning embedded systems. In response to these inquiries, I have written this blog post to provide a beginner’s guide for learning embedded systems.
 
