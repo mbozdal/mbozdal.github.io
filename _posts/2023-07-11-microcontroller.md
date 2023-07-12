@@ -3,6 +3,7 @@ layout: post
 title: What is a microcontroller?
 date: 2023-07-11 17:39:00
 description: A microcontroller, often abbreviated as MCU, is a compact computer system integrated into a single chip. 
+tag: embedded
 ---
 # What is a microcontroller?
 

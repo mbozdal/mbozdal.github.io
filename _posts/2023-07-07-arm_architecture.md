@@ -3,6 +3,7 @@ layout: post
 title: The Arm Architecture
 date: 2023-07-07 17:39:00
 description: Explore the Arm architecture, processors, and the Thumb-2 instruction set that provide low-cost, efficient, and versatile computing for a wide range of devices and applications.
+tag: embedded
 ---
 # Arm
 
