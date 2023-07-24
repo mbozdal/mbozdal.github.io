@@ -53,3 +53,5 @@ Remember, learning embedded systems is a journey that requires dedication and co
 
 - [Resources for beginners](https://embeddedartistry.com/beginners/)
 - [Modern Embedded Systems Programming Course](https://www.youtube.com/playlist?list=PLPW8O6W-1chwyTzI3BHwBLbGQoPFxPAPM)
+- Embedded Systems with ARM Cortex-M Microcontrollers in Assembly Language and C - Yifeng Zhu
+- Introduction to ARM Cortex-M Microcontrollers - Jonathan W. Valvano
