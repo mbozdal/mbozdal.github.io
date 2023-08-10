@@ -77,9 +77,7 @@ The key components stored in the APSR:
 | [1] | SPSEL | Defines the currently active stack pointer: In Handler mode this bit reads as zero and ignores writes. The Cortex-M3 updates this bit automatically on exception return.
 0 = MSP is the current stack pointer
 1 = PSP is the current stack pointer. |
-| [0] | nPRIV | Defines the Thread mode privilege level:
-0 = Privileged
-1 = Unprivileged. |
+| [0] | nPRIV | Defines the Thread mode privilege level: 0 = Privileged 1 = Unprivileged. |
 
 **Additional Resources:**
 
