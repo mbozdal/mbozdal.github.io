@@ -7,7 +7,7 @@ tag: embedded
 ---
 The ArmCortex-M3 microcontroller architecture follows the Harvard architecture design, separating memory into distinct areas for instructions and data. This allows for simultaneous access to both instruction memory and data memory, leading to improved performance. 
 
-{% include figure.html path="assets/img/system_architecture_stm32.png" title="System architecture of STM32F1x Series"  %}
+{% include figure.html path="assets/img/system_architecture_stm32.JPG" title="System architecture of STM32F1x Series"  %}
 
 The Cortex-M instruction set includes the "Thumb" instruction set, which is a 16-bit compact encoding of instructions. This allows for more instructions to fit into a smaller memory space. Thumb-2 further extends this concept, allowing a mix of 16-bit and 32-bit instructions for better code density and performance.
 
