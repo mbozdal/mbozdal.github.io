@@ -1,13 +1,11 @@
 ---
 layout: post
-title: Startup Code for Arm
+title: Cortex-M Architecture
 date: 2023-08-09 17:39:00
-description: The startup code in an embedded system plays a vital role in initializing the hardware and setting up the execution environment upon system power-on or reset.
+description: The ArmCortex-M3 microcontroller architecture follows the Harvard architecture design, separating memory into distinct areas for instructions and data.
 tag: embedded
 ---
 The ArmCortex-M3 microcontroller architecture follows the Harvard architecture design, separating memory into distinct areas for instructions and data. This allows for simultaneous access to both instruction memory and data memory, leading to improved performance. 
-
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/64fbccc8-b8c4-4861-aea2-79622355d479/Untitled.png)
 
 {% include figure.html path="assets/img/system_architecture_stm32.png" title="System architecture of STM32F1x Series"  %}
 
@@ -26,18 +24,16 @@ The Cortex-M3 microcontroller architecture employs distinct buses and features f
 
 Registers are small fast storage areas within the CPU that are used to hold data temporarily during program execution. They are integral to various aspects of the processor's functioning, such as data manipulation, control flow, and interaction with memory and peripherals.
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/132cd084-dec9-4720-9e01-e431f58146d9/Untitled.jpeg)
-
-{% include figure.html path="assets/img/core_registers.jpg" title="Core Registers"  %}
+{% include figure.html path="assets/img/core_registers.JPG" title="Core Registers"  %}
 
 The Core registers found in Arm microcontrollers are:
 
 1. **General-Purpose Registers (GPRs)**: R0-R12 are 32-bit general-purpose registers for data operations. These registers are used for general data manipulation. They store operands for arithmetic and logical operations, intermediate results, and function parameters.
 2. **Stack Pointer (SP)**: The SP (R13) register points to the top of the stack in memory. The stack is used to store temporary data during function calls, interrupt handling, and other operations. In Thread mode, bit[1] of the CONTROL register indicates the stack pointer to use:
-    - 0 = *Main Stack Pointer* (MSP). This is the reset value.
-    - 1 = *Process Stack Pointer* (PSP).
+    - 0 = *Main Stack Pointer* (MSP). This is the reset value.
+    - 1 = *Process Stack Pointer* (PSP).
     
-    On reset, the processor loads the MSP with the value from address `0x00000000`.
+    On reset, the processor loads the MSP with the value from address `0x00000000`.
     
 3. **Link Register (LR)**: The LR (R14) register holds the return address for subroutines, function calls, and exceptions. It's used to ensure that the program knows where to resume execution after the function call is complete. On reset, the processor sets the LR value to `0xFFFFFFFF.`
 4. **Program Counter (PC)**: The PC (R15) register holds the address of the next instruction to be fetched and executed. It keeps track of the program's execution progress. On reset, the processor loads the PC with the value of the reset vector, which is at address `0x00000004`. Bit[0] of the value is loaded into the EPSR T-bit at reset and must be 1.
