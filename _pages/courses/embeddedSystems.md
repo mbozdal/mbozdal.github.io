@@ -1,6 +1,6 @@
 ---
 layout: page
-permalink: /courses/ee304
+permalink: /courses/embedded_systems
 title: EE 304 Embedded Systems
 description:
 nav: false

@@ -7,8 +7,6 @@ tag: embedded
 ---
 The ArmCortex-M3 microcontroller architecture follows the Harvard architecture design, separating memory into distinct areas for instructions and data. This allows for simultaneous access to both instruction memory and data memory, leading to improved performance. 
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/64fbccc8-b8c4-4861-aea2-79622355d479/Untitled.png)
-
 {% include figure.html path="assets/img/system_architecture_stm32.JPG" title="System architecture of STM32F1x Series"  %}
 
 The Cortex-M instruction set includes the "Thumb" instruction set, which is a 16-bit compact encoding of instructions. This allows for more instructions to fit into a smaller memory space. Thumb-2 further extends this concept, allowing a mix of 16-bit and 32-bit instructions for better code density and performance.
@@ -26,7 +24,6 @@ The Cortex-M3 microcontroller architecture employs distinct buses and features f
 
 Registers are small fast storage areas within the CPU that are used to hold data temporarily during program execution. They are integral to various aspects of the processor's functioning, such as data manipulation, control flow, and interaction with memory and peripherals.
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/132cd084-dec9-4720-9e01-e431f58146d9/Untitled.jpeg)
 
 {% include figure.html path="assets/img/core_registers.JPG" title="Core Registers"  %}
 
@@ -51,7 +48,6 @@ The Core registers found in Arm microcontrollers are:
     These registers are mutually exclusive bitfields in the 32-bit PSR. The bit assignments are:
     
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/4836869d-b223-4077-b24c-cc7c98319846/Untitled.png)
 
 {% include figure.html path="assets/img/program_status_register.JPG" title="Program Status Registers"  %}
 
@@ -80,8 +76,10 @@ The key components stored in the APSR:
 | Bits | Name | Function |
 | --- | --- | --- |
 | [31:2] | - | Reserved. |
-| [1] | SPSEL | Defines the currently active stack pointer: In Handler mode this bit reads as zero and ignores writes. The Cortex-M3 updates this bit automatically on exception return. 0 = MSP is the current stack pointer 1 = PSP is the current stack pointer. |
-| [0] | nPRIV | Defines the Thread mode privilege level: 0 = Privileged 1 = Unprivileged. |
+| [1] | SPSEL | Defines the currently active stack pointer: In Handler mode this bit reads as zero and ignores writes. The Cortex-M3 updates this bit automatically on exception return. **0** = MSP is the current stack pointer **1** = PSP is the current stack pointer. |
+| [0] | nPRIV | Defines the Thread mode privilege level: **0** = Privileged **1** = Unprivileged. |
+
+
 
 **Additional Resources:**
 
