@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="https://mbozdal.github.io/feed.xml" rel="self" type="application/atom+xml"/><link href="https://mbozdal.github.io/" rel="alternate" type="text/html" hreflang="en"/><updated>2024-12-22T23:21:06+00:00</updated><id>https://mbozdal.github.io/feed.xml</id><title type="html">blank</title><subtitle>A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design. </subtitle><entry><title type="html">Cortex-M Architecture</title><link href="https://mbozdal.github.io/blog/2023/cortex-m_architecture/" rel="alternate" type="text/html" title="Cortex-M Architecture"/><published>2023-08-09T17:39:00+00:00</published><updated>2023-08-09T17:39:00+00:00</updated><id>https://mbozdal.github.io/blog/2023/cortex-m_architecture</id><content type="html" xml:base="https://mbozdal.github.io/blog/2023/cortex-m_architecture/"><![CDATA[<p>The ArmCortex-M3 microcontroller architecture follows the Harvard architecture design, separating memory into distinct areas for instructions and data. This allows for simultaneous access to both instruction memory and data memory, leading to improved performance.</p> <figure> <picture> <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/assets/img/system_architecture_stm32.JPG-480.webp"/> <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/assets/img/system_architecture_stm32.JPG-800.webp"/> <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/assets/img/system_architecture_stm32.JPG-1400.webp"/> <img src="/assets/img/system_architecture_stm32.JPG" width="auto" height="auto" title="System architecture of STM32F1x Series" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <p>The Cortex-M instruction set includes the “Thumb” instruction set, which is a 16-bit compact encoding of instructions. This allows for more instructions to fit into a smaller memory space. Thumb-2 further extends this concept, allowing a mix of 16-bit and 32-bit instructions for better code density and performance.</p> <p>The Cortex-M3 microcontroller architecture employs distinct buses and features for different tasks, contributing to its efficient operation in embedded systems:</p> <ol> <li><strong>ICode Bus</strong>: This bus is responsible for fetching instructions from memory, typically from a flash ROM. This is the pathway through which the processor retrieves program code for execution.</li> <li><strong>DCode Bus</strong>: The DCode bus is used for debugging purposes. It provides a pathway for advanced debugging features, allowing developers to interact with and analyze the behavior of the microcontroller during program execution.</li> <li><strong>System Bus Interface</strong>: The system bus interface facilitates data exchange between the processor core and memory, as well as input/output (I/O) devices. It’s a critical bus for moving data around in the system.</li> <li><strong>DMA (Direct Memory Access)</strong>: DMA is a mechanism that allows certain peripherals to directly access memory without involving the processor core. This enhances data transfer efficiency and offloads the CPU from managing data movement.</li> <li><strong>AHB (Advanced High-performance Bus)</strong>: AHB is a high-performance bus protocol used to connect faster components in the system, like memory blocks, high-speed I/O (USB, Ethernet), and so on. It’s designed to handle higher bandwidth and provide better performance.</li> <li><strong>APB (Advanced Peripheral Bus)</strong>: APB is a slower peripheral bus protocol used to connect slower peripherals in the system. It’s used for components that don’t require high-speed access and is more power-efficient.</li> </ol> <h2 id="registers">Registers</h2> <p>Registers are small fast storage areas within the CPU that are used to hold data temporarily during program execution. They are integral to various aspects of the processor’s functioning, such as data manipulation, control flow, and interaction with memory and peripherals.</p> <figure> <picture> <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/assets/img/core_registers.JPG-480.webp"/> <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/assets/img/core_registers.JPG-800.webp"/> <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/assets/img/core_registers.JPG-1400.webp"/> <img src="/assets/img/core_registers.JPG" width="auto" height="auto" title="Core Registers" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <p>The Core registers found in Arm microcontrollers are:</p> <ol> <li><strong>General-Purpose Registers (GPRs)</strong>: R0-R12 are 32-bit general-purpose registers for data operations. These registers are used for general data manipulation. They store operands for arithmetic and logical operations, intermediate results, and function parameters.</li> <li><strong>Stack Pointer (SP)</strong>: The SP (R13) register points to the top of the stack in memory. The stack is used to store temporary data during function calls, interrupt handling, and other operations. In Thread mode, bit[1] of the CONTROL register indicates the stack pointer to use: <ul> <li>0 = <em>Main Stack Pointer</em> (MSP). This is the reset value.</li> <li>1 = <em>Process Stack Pointer</em> (PSP).</li> </ul> <p>On reset, the processor loads the MSP with the value from address <code class="language-plaintext highlighter-rouge">0x00000000</code>.</p> </li> <li><strong>Link Register (LR)</strong>: The LR (R14) register holds the return address for subroutines, function calls, and exceptions. It’s used to ensure that the program knows where to resume execution after the function call is complete. On reset, the processor sets the LR value to <code class="language-plaintext highlighter-rouge">0xFFFFFFFF.</code></li> <li><strong>Program Counter (PC)</strong>: The PC (R15) register holds the address of the next instruction to be fetched and executed. It keeps track of the program’s execution progress. On reset, the processor loads the PC with the value of the reset vector, which is at address <code class="language-plaintext highlighter-rouge">0x00000004</code>. Bit[0] of the value is loaded into the EPSR T-bit at reset and must be 1.</li> <li><strong>Program Status Registers (PSR)</strong>: The <em>Program Status Register</em> (PSR) combines: <ul> <li><em>Application Program Status Register</em> (APSR)</li> <li><em>Interrupt Program Status Register</em> (IPSR)</li> <li><em>Execution Program Status Register</em> (EPSR).</li> </ul> <p>These registers hold various flags and status information about the processor’s state. For example, they store the condition codes after arithmetic operations and control the processor’s execution mode.</p> <p>These registers are mutually exclusive bitfields in the 32-bit PSR. The bit assignments are:</p> </li> </ol> <figure> <picture> <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/assets/img/program_status_register.JPG-480.webp"/> <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/assets/img/program_status_register.JPG-800.webp"/> <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/assets/img/program_status_register.JPG-1400.webp"/> <img src="/assets/img/program_status_register.JPG" width="auto" height="auto" title="Program Status Registers" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <p>The key components stored in the APSR:</p> <ol> <li><strong>Negative Flag (N) - Bit [31]</strong>: This flag is set if the result of a signed operation is negative.</li> <li><strong>Zero Flag (Z) - Bit [30]</strong>: This flag is set if the result of an operation is zero. It’s used in conditional branching and testing.</li> <li><strong>Carry or Unsigned Overflow Flag (C) - Bit [29]</strong>: This flag is set if an operation generates a carry out from the most significant bit or an unsigned overflow condition.</li> <li><strong>Overflow Flag (V) - Bit [28]</strong>: This flag is set if a signed operation results in an overflow condition.</li> <li><strong>Q Flag - Bit [27]</strong>: It’s used in the context of saturation arithmetic (like Saturating Addition and Saturating Subtraction instructions).</li> <li><strong>Exception Mask Registers:</strong> The exception mask registers disable the handling of exceptions by the processor. Disable exceptions where they might impact on timing critical tasks. <ol> <li><strong>Priority Mask Register (PRIMASK):</strong> The PRIMASK register prevents activation of all exceptions with configurable priority. Bit [0] of this register controls the activation of exceptions. Its behavior is as follows: <ul> <li>1 = prevents the activation of all exceptions with configurable priority.</li> <li>0 = no effect</li> </ul> </li> <li><strong>Fault Mask Register (FAULTMASK):</strong> The FAULTMASK register prevents activation of all exceptions except for <em>Non-Maskable Interrupt</em> (NMI). <ul> <li>1 = prevents the activation of all exceptions except for NMI.</li> <li>0 = no effect</li> </ul> </li> <li><strong>Base Priority Mask Register (BASEPRI):</strong> It is a special register used to control the priority level at which interrupts can preempt the currently executing code. It provides a mechanism for setting a “base” priority level below which certain interrupts will not preempt the execution of code at higher priority levels. Bit [7:0] of this register controls the behavior as follow: <ul> <li>0x 00 = no effect</li> <li>Nonzero = defines the base priority for exception processing. The processor does not process any exception with a priority value greater than or equal to BASEPRI.</li> </ul> <p>Suppose we set BASEPRI to a value of 3. This means that interrupts with priority levels 0, 1, and 2 can still interrupt the ongoing task. However, requests at priority levels 3 and higher will be held off temporarily. In other words, only the most important interrupts below the threshold will be allowed to break into the execution of the current task.</p> </li> </ol> </li> <li><strong>CONTROL Register</strong>: The CONTROL register controls the stack used and the privilege level for software execution when the processor is in Thread mode. The CONTROL register bit **assignments are:</li> </ol> <table> <thead> <tr> <th>Bits</th> <th>Name</th> <th>Function</th> </tr> </thead> <tbody> <tr> <td>[31:2]</td> <td>-</td> <td>Reserved.</td> </tr> <tr> <td>[1]</td> <td>SPSEL</td> <td>Defines the currently active stack pointer: In Handler mode this bit reads as zero and ignores writes. The Cortex-M3 updates this bit automatically on exception return. <strong>0</strong> = MSP is the current stack pointer <strong>1</strong> = PSP is the current stack pointer.</td> </tr> <tr> <td>[0]</td> <td>nPRIV</td> <td>Defines the Thread mode privilege level: <strong>0</strong> = Privileged <strong>1</strong> = Unprivileged.</td> </tr> </tbody> </table> <p><strong>Additional Resources:</strong></p> <p><a href="https://developer.arm.com/documentation/dui0552/a/the-cortex-m3-processor/programmers-model/core-registers?lang=en">Cortex-M3 Devices Generic User Guide</a></p>]]></content><author><name></name></author><category term="embedded"/><summary type="html"><![CDATA[The ArmCortex-M3 microcontroller architecture follows the Harvard architecture design, separating memory into distinct areas for instructions and data.]]></summary></entry><entry><title type="html">Startup Code for Arm</title><link href="https://mbozdal.github.io/blog/2023/startup/" rel="alternate" type="text/html" title="Startup Code for Arm"/><published>2023-07-13T17:39:00+00:00</published><updated>2023-07-13T17:39:00+00:00</updated><id>https://mbozdal.github.io/blog/2023/startup</id><content type="html" xml:base="https://mbozdal.github.io/blog/2023/startup/"><![CDATA[<p>The startup code in an embedded system plays a vital role in initializing the hardware and setting up the execution environment upon system power-on or reset. It is typically written in assembly or C languages and executed before the main function. The startup code for the STM32F107 microcontroller, provided below, configures low-level hardware specific to the architecture.</p> <p>The startup code performs several essential tasks:</p> <ol> <li> <p><strong>Stack Setup:</strong></p> <p>The provided code segment defines the stack size and allocates memory for the stack.</p> <div class="language-nasm highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="no">Stack_Size</span><span class="kd">      EQU</span>     <span class="mh">0x00000400</span>
+    
+                 <span class="nf">AREA</span>    <span class="nv">STACK</span><span class="p">,</span> <span class="nv">NOINIT</span><span class="p">,</span> <span class="nv">READWRITE</span><span class="p">,</span> <span class="nb">AL</span><span class="nv">IGN</span><span class="err">=</span><span class="mi">3</span>
+ <span class="nf">Stack_Mem</span>       <span class="nb">SP</span><span class="nv">ACE</span>   <span class="nv">Stack_Size</span>
+ <span class="nf">__initial_sp</span>
+</code></pre></div> </div> <p>The <strong><code class="language-plaintext highlighter-rouge">Stack_Size</code></strong> symbolic constant is assigned a value of <strong><code class="language-plaintext highlighter-rouge">0x00000400</code></strong>, representing the stack size in hexadecimal notation. The <strong><code class="language-plaintext highlighter-rouge">AREA</code></strong> directive creates a new section called “STACK” with the attributes <strong><code class="language-plaintext highlighter-rouge">NOINIT</code></strong>, <strong><code class="language-plaintext highlighter-rouge">READWRITE</code></strong>, and <strong><code class="language-plaintext highlighter-rouge">ALIGN=3</code></strong>, indicating that the memory in this section initialized to zero, can be read from and written to, and is aligned on an 8-byte (2^3) boundary. The <strong><code class="language-plaintext highlighter-rouge">Stack_Mem</code></strong> label marks the start of the allocated memory block for the stack, and the <strong><code class="language-plaintext highlighter-rouge">SPACE</code></strong> directive reserves the specified size of memory, in this case <strong><code class="language-plaintext highlighter-rouge">1024</code></strong> bytes . Lastly, the <strong><code class="language-plaintext highlighter-rouge">__initial_sp</code></strong> label represents the initial value of the stack pointer, which is conventionally used to initialize the stack pointer.</p> <ol> <li><strong>Heap Setup:</strong></li> </ol> <p>Similar to the stack setup, the heap setup section allocates memory for the heap. The label <strong><code class="language-plaintext highlighter-rouge">__heap_base</code></strong> denotes the starting address of the allocated memory block for the heap. The <strong><code class="language-plaintext highlighter-rouge">Heap_Mem</code></strong> label is used in conjunction with the <strong><code class="language-plaintext highlighter-rouge">SPACE</code></strong> directive to reserve the specified size of memory for the heap. Additionally, the label <strong><code class="language-plaintext highlighter-rouge">__heap_limit</code></strong> is used to mark the end of the allocated heap memory.</p> <div class="language-nasm highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="no">Heap_Size</span><span class="kd">       EQU</span>     <span class="mh">0x00000200</span>
+    
+                 <span class="nf">AREA</span>    <span class="nv">HEAP</span><span class="p">,</span> <span class="nv">NOINIT</span><span class="p">,</span> <span class="nv">READWRITE</span><span class="p">,</span> <span class="nb">AL</span><span class="nv">IGN</span><span class="err">=</span><span class="mi">3</span>
+ <span class="nf">__heap_base</span>
+ <span class="nf">Heap_Mem</span>        <span class="nb">SP</span><span class="nv">ACE</span>   <span class="nv">Heap_Size</span>
+ <span class="nf">__heap_limit</span>
+    
+                 <span class="nf">PRESERVE8</span>
+                 <span class="nf">THUMB</span>
+</code></pre></div> </div> <p>The <strong><code class="language-plaintext highlighter-rouge">PRESERVE8</code></strong> directive ensures that 8-byte stack alignment is maintained, while the <strong><code class="language-plaintext highlighter-rouge">THUMB</code></strong> directive sets the program execution state to Thumb mode, which is a reduced instruction set encoding used in Arm processors.</p> <ol> <li><strong>Vector Table Initialization:</strong></li> </ol> <p>The vector table initialization is a crucial part of the startup code. It creates the vector table, which stores the addresses of various interrupt service routines (ISRs) and exception handlers.</p> <p>Each entry in the vector table is defined using the <strong><code class="language-plaintext highlighter-rouge">DCD</code></strong> directive, assigning a 32-bit address value to represent the location of the corresponding ISR in memory. The vector table begins with the stack pointer value (<strong><code class="language-plaintext highlighter-rouge">__initial_sp</code></strong>), indicating the top of the stack. It then lists various interrupt and exception handlers, such as reset, NMI, hard fault, memory management fault, bus fault, usage fault, and more. Additionally, the vector table includes entries for external interrupts like ADC, timers, UART, SPI, CAN, and others.</p> <p>To determine the size of the vector table, the symbol <strong><code class="language-plaintext highlighter-rouge">__Vectors_Size</code></strong> is defined by subtracting the address of the start of the vector table (<strong><code class="language-plaintext highlighter-rouge">__Vectors</code></strong>) from the address of the end of the vector table (<strong><code class="language-plaintext highlighter-rouge">__Vectors_End</code></strong>).</p> <div class="language-nasm highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="no">__Vectors_Size</span><span class="kd">  EQU</span>  <span class="nv">__Vectors_End</span> <span class="o">-</span> <span class="nv">__Vectors</span>
+    
+                 <span class="nf">AREA</span>    <span class="o">|</span><span class="nv">.text</span><span class="o">|</span><span class="p">,</span> <span class="nv">CODE</span><span class="p">,</span> <span class="nv">READONLY</span>
+</code></pre></div> </div> <ol> <li><strong>Reset and other Handler Functions</strong></li> </ol> <p>The reset handler routine is responsible for initializing the system after a reset or power-on. It calls the <strong><code class="language-plaintext highlighter-rouge">SystemInit</code></strong> function, which performs hardware initialization, and then transfers control to the <strong><code class="language-plaintext highlighter-rouge">__main</code></strong> function (or ENTRY directive if using assembly). The <strong><code class="language-plaintext highlighter-rouge">__main</code></strong> function serves as the entry point for the application code. By executing these steps in sequence, the reset handler ensures that the system is properly initialized before starting the main application.</p> <div class="language-nasm highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="c1">; Reset handler</span>
+ <span class="nf">Reset_Handler</span>    <span class="nv">PROC</span>
+                  <span class="k">EXPORT</span>  <span class="nv">Reset_Handler</span>             <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+         <span class="k">IMPORT</span>  <span class="nv">SystemInit</span>
+         <span class="k">IMPORT</span>  <span class="nv">__main</span>
+                  <span class="nf">LDR</span>     <span class="nv">R0</span><span class="p">,</span> <span class="err">=</span><span class="nv">SystemInit</span>
+                  <span class="nf">BLX</span>     <span class="nv">R0</span>
+                  <span class="nf">LDR</span>     <span class="nv">R0</span><span class="p">,</span> <span class="err">=</span><span class="nv">__main</span>
+                  <span class="nf">BX</span>      <span class="nv">R0</span>
+                  <span class="nf">ENDP</span>
+</code></pre></div> </div> <p>The startup code sets up the necessary environment and prepares the microcontroller for the execution of user code. It initializes the stack and heap, configures the vector table, and handles the system reset. These tasks are essential for a well-organized and controlled system initialization in an ARM-based embedded system.</p> </li> </ol> <p><strong>Further Resources:</strong></p> <p><a href="https://community.silabs.com/s/article/understand-the-gnu-assembler-startup-file-of-cortex-m4?language=en_US">Understand the GNU assembler startup file of cortex M4</a></p> <p><a href="https://www.youtube.com/watch?v=2Hm8eEHsgls&amp;ab_channel=FastbitEmbeddedBrainAcademy">Writing MCU startup file from scratch</a></p> <div class="language-nasm highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">;******************** (C) COPYRIGHT 2011 STMicroelectronics ********************</span>
+<span class="c1">;* File Name          : startup_stm32f10x_cl.s</span>
+<span class="c1">;* Author             : MCD Application Team</span>
+<span class="c1">;* Version            : V3.5.1</span>
+<span class="c1">;* Date               : 08-September-2021</span>
+<span class="c1">;* Description        : STM32F10x Connectivity line devices vector table for MDK-ARM </span>
+<span class="c1">;*                      toolchain. </span>
+<span class="c1">;*                      This module performs:</span>
+<span class="c1">;*                      - Set the initial SP</span>
+<span class="c1">;*                      - Set the initial PC == Reset_Handler</span>
+<span class="c1">;*                      - Set the vector table entries with the exceptions ISR address</span>
+<span class="c1">;*                      - Configure the clock system</span>
+<span class="c1">;*                      - Branches to __main in the C library (which eventually</span>
+<span class="c1">;*                        calls main()).</span>
+<span class="c1">;*                      After Reset the CortexM3 processor is in Thread mode,</span>
+<span class="c1">;*                      priority is Privileged, and the Stack is set to Main.</span>
+<span class="c1">;* &lt;&lt;&lt; Use Configuration Wizard in Context Menu &gt;&gt;&gt;   </span>
+<span class="c1">;*******************************************************************************</span>
+<span class="c1">;*</span>
+<span class="c1">;* Copyright (c) 2011 STMicroelectronics.</span>
+<span class="c1">;* All rights reserved.</span>
+<span class="c1">;*</span>
+<span class="c1">;* This software is licensed under terms that can be found in the LICENSE file</span>
+<span class="c1">;* in the root directory of this software component.</span>
+<span class="c1">;* If no LICENSE file comes with this software, it is provided AS-IS.</span>
+<span class="c1">;</span>
+<span class="c1">;*******************************************************************************</span>
+
+<span class="c1">; Amount of memory (in bytes) allocated for Stack</span>
+<span class="c1">; Tailor this value to your application needs</span>
+<span class="c1">; &lt;h&gt; Stack Configuration</span>
+<span class="c1">;   &lt;o&gt; Stack Size (in Bytes) &lt;0x0-0xFFFFFFFF:8&gt;</span>
+<span class="c1">; &lt;/h&gt;</span>
+
+<span class="no">Stack_Size</span><span class="kd">      EQU</span>     <span class="mh">0x00000400</span>
+
+                <span class="nf">AREA</span>    <span class="nv">STACK</span><span class="p">,</span> <span class="nv">NOINIT</span><span class="p">,</span> <span class="nv">READWRITE</span><span class="p">,</span> <span class="nb">AL</span><span class="nv">IGN</span><span class="err">=</span><span class="mi">3</span>
+<span class="nf">Stack_Mem</span>       <span class="nb">SP</span><span class="nv">ACE</span>   <span class="nv">Stack_Size</span>
+<span class="nf">__initial_sp</span>
+
+<span class="c1">; &lt;h&gt; Heap Configuration</span>
+<span class="c1">;   &lt;o&gt;  Heap Size (in Bytes) &lt;0x0-0xFFFFFFFF:8&gt;</span>
+<span class="c1">; &lt;/h&gt;</span>
+
+<span class="no">Heap_Size</span><span class="kd">       EQU</span>     <span class="mh">0x00000200</span>
+
+                <span class="nf">AREA</span>    <span class="nv">HEAP</span><span class="p">,</span> <span class="nv">NOINIT</span><span class="p">,</span> <span class="nv">READWRITE</span><span class="p">,</span> <span class="nb">AL</span><span class="nv">IGN</span><span class="err">=</span><span class="mi">3</span>
+<span class="nf">__heap_base</span>
+<span class="nf">Heap_Mem</span>        <span class="nb">SP</span><span class="nv">ACE</span>   <span class="nv">Heap_Size</span>
+<span class="nf">__heap_limit</span>
+
+                <span class="nf">PRESERVE8</span>
+                <span class="nf">THUMB</span>
+
+<span class="c1">; Vector Table Mapped to Address 0 at Reset</span>
+                <span class="nf">AREA</span>    <span class="nv">RESET</span><span class="p">,</span> <span class="nv">DATA</span><span class="p">,</span> <span class="nv">READONLY</span>
+                <span class="k">EXPORT</span>  <span class="nv">__Vectors</span>
+                <span class="k">EXPORT</span>  <span class="nv">__Vectors_End</span>
+                <span class="k">EXPORT</span>  <span class="nv">__Vectors_Size</span>
+
+<span class="nf">__Vectors</span>       <span class="nv">DCD</span>     <span class="nv">__initial_sp</span>               <span class="c1">; Top of Stack</span>
+                <span class="nf">DCD</span>     <span class="nv">Reset_Handler</span>              <span class="c1">; Reset Handler</span>
+                <span class="nf">DCD</span>     <span class="nv">NMI_Handler</span>                <span class="c1">; NMI Handler</span>
+                <span class="nf">DCD</span>     <span class="nv">HardFault_Handler</span>          <span class="c1">; Hard Fault Handler</span>
+                <span class="nf">DCD</span>     <span class="nv">MemManage_Handler</span>          <span class="c1">; MPU Fault Handler</span>
+                <span class="nf">DCD</span>     <span class="nv">BusFault_Handler</span>           <span class="c1">; Bus Fault Handler</span>
+                <span class="nf">DCD</span>     <span class="nv">UsageFault_Handler</span>         <span class="c1">; Usage Fault Handler</span>
+                <span class="nf">DCD</span>     <span class="mi">0</span>                          <span class="c1">; Reserved</span>
+                <span class="nf">DCD</span>     <span class="mi">0</span>                          <span class="c1">; Reserved</span>
+                <span class="nf">DCD</span>     <span class="mi">0</span>                          <span class="c1">; Reserved</span>
+                <span class="nf">DCD</span>     <span class="mi">0</span>                          <span class="c1">; Reserved</span>
+                <span class="nf">DCD</span>     <span class="nv">SVC_Handler</span>                <span class="c1">; SVCall Handler</span>
+                <span class="nf">DCD</span>     <span class="nv">DebugMon_Handler</span>           <span class="c1">; Debug Monitor Handler</span>
+                <span class="nf">DCD</span>     <span class="mi">0</span>                          <span class="c1">; Reserved</span>
+                <span class="nf">DCD</span>     <span class="nv">PendSV_Handler</span>             <span class="c1">; PendSV Handler</span>
+                <span class="nf">DCD</span>     <span class="nv">SysTick_Handler</span>            <span class="c1">; SysTick Handler</span>
+
+                <span class="c1">; External Interrupts</span>
+                <span class="nf">DCD</span>     <span class="nv">WWDG_IRQHandler</span>            <span class="c1">; Window Watchdog</span>
+                <span class="nf">DCD</span>     <span class="nv">PVD_IRQHandler</span>             <span class="c1">; PVD through EXTI Line detect</span>
+                <span class="nf">DCD</span>     <span class="nv">TAMPER_IRQHandler</span>          <span class="c1">; Tamper</span>
+                <span class="nf">DCD</span>     <span class="nv">RTC_IRQHandler</span>             <span class="c1">; RTC</span>
+                <span class="nf">DCD</span>     <span class="nv">FLASH_IRQHandler</span>           <span class="c1">; Flash</span>
+                <span class="nf">DCD</span>     <span class="nv">RCC_IRQHandler</span>             <span class="c1">; RCC</span>
+                <span class="nf">DCD</span>     <span class="nv">EXTI0_IRQHandler</span>           <span class="c1">; EXTI Line 0</span>
+                <span class="nf">DCD</span>     <span class="nv">EXTI1_IRQHandler</span>           <span class="c1">; EXTI Line 1</span>
+                <span class="nf">DCD</span>     <span class="nv">EXTI2_IRQHandler</span>           <span class="c1">; EXTI Line 2</span>
+                <span class="nf">DCD</span>     <span class="nv">EXTI3_IRQHandler</span>           <span class="c1">; EXTI Line 3</span>
+                <span class="nf">DCD</span>     <span class="nv">EXTI4_IRQHandler</span>           <span class="c1">; EXTI Line 4</span>
+                <span class="nf">DCD</span>     <span class="nv">DMA1_Channel1_IRQHandler</span>   <span class="c1">; DMA1 Channel 1</span>
+                <span class="nf">DCD</span>     <span class="nv">DMA1_Channel2_IRQHandler</span>   <span class="c1">; DMA1 Channel 2</span>
+                <span class="nf">DCD</span>     <span class="nv">DMA1_Channel3_IRQHandler</span>   <span class="c1">; DMA1 Channel 3</span>
+                <span class="nf">DCD</span>     <span class="nv">DMA1_Channel4_IRQHandler</span>   <span class="c1">; DMA1 Channel 4</span>
+                <span class="nf">DCD</span>     <span class="nv">DMA1_Channel5_IRQHandler</span>   <span class="c1">; DMA1 Channel 5</span>
+                <span class="nf">DCD</span>     <span class="nv">DMA1_Channel6_IRQHandler</span>   <span class="c1">; DMA1 Channel 6</span>
+                <span class="nf">DCD</span>     <span class="nv">DMA1_Channel7_IRQHandler</span>   <span class="c1">; DMA1 Channel 7</span>
+                <span class="nf">DCD</span>     <span class="nv">ADC1_2_IRQHandler</span>          <span class="c1">; ADC1 and ADC2</span>
+                <span class="nf">DCD</span>     <span class="nv">CAN1_TX_IRQHandler</span>         <span class="c1">; CAN1 TX</span>
+                <span class="nf">DCD</span>     <span class="nv">CAN1_RX0_IRQHandler</span>        <span class="c1">; CAN1 RX0</span>
+                <span class="nf">DCD</span>     <span class="nv">CAN1_RX1_IRQHandler</span>        <span class="c1">; CAN1 RX1</span>
+                <span class="nf">DCD</span>     <span class="nv">CAN1_SCE_IRQHandler</span>        <span class="c1">; CAN1 SCE</span>
+                <span class="nf">DCD</span>     <span class="nv">EXTI9_5_IRQHandler</span>         <span class="c1">; EXTI Line 9..5</span>
+                <span class="nf">DCD</span>     <span class="nv">TIM1_BRK_IRQHandler</span>        <span class="c1">; TIM1 Break</span>
+                <span class="nf">DCD</span>     <span class="nv">TIM1_UP_IRQHandler</span>         <span class="c1">; TIM1 Update</span>
+                <span class="nf">DCD</span>     <span class="nv">TIM1_TRG_COM_IRQHandler</span>    <span class="c1">; TIM1 Trigger and Commutation</span>
+                <span class="nf">DCD</span>     <span class="nv">TIM1_CC_IRQHandler</span>         <span class="c1">; TIM1 Capture Compare</span>
+                <span class="nf">DCD</span>     <span class="nv">TIM2_IRQHandler</span>            <span class="c1">; TIM2</span>
+                <span class="nf">DCD</span>     <span class="nv">TIM3_IRQHandler</span>            <span class="c1">; TIM3</span>
+                <span class="nf">DCD</span>     <span class="nv">TIM4_IRQHandler</span>            <span class="c1">; TIM4</span>
+                <span class="nf">DCD</span>     <span class="nv">I2C1_EV_IRQHandler</span>         <span class="c1">; I2C1 Event</span>
+                <span class="nf">DCD</span>     <span class="nv">I2C1_ER_IRQHandler</span>         <span class="c1">; I2C1 Error</span>
+                <span class="nf">DCD</span>     <span class="nv">I2C2_EV_IRQHandler</span>         <span class="c1">; I2C2 Event</span>
+                <span class="nf">DCD</span>     <span class="nv">I2C2_ER_IRQHandler</span>         <span class="c1">; I2C1 Error</span>
+                <span class="nf">DCD</span>     <span class="nb">SP</span><span class="nv">I1_IRQHandler</span>            <span class="c1">; SPI1</span>
+                <span class="nf">DCD</span>     <span class="nb">SP</span><span class="nv">I2_IRQHandler</span>            <span class="c1">; SPI2</span>
+                <span class="nf">DCD</span>     <span class="nv">USART1_IRQHandler</span>          <span class="c1">; USART1</span>
+                <span class="nf">DCD</span>     <span class="nv">USART2_IRQHandler</span>          <span class="c1">; USART2</span>
+                <span class="nf">DCD</span>     <span class="nv">USART3_IRQHandler</span>          <span class="c1">; USART3</span>
+                <span class="nf">DCD</span>     <span class="nv">EXTI15_10_IRQHandler</span>       <span class="c1">; EXTI Line 15..10</span>
+                <span class="nf">DCD</span>     <span class="nv">RTCAlarm_IRQHandler</span>        <span class="c1">; RTC alarm through EXTI line</span>
+                <span class="nf">DCD</span>     <span class="nv">OTG_FS_WKUP_IRQHandler</span>     <span class="c1">; USB OTG FS Wakeup through EXTI line</span>
+                <span class="nf">DCD</span>     <span class="mi">0</span>                          <span class="c1">; Reserved</span>
+                <span class="nf">DCD</span>     <span class="mi">0</span>                          <span class="c1">; Reserved</span>
+                <span class="nf">DCD</span>     <span class="mi">0</span>                          <span class="c1">; Reserved</span>
+                <span class="nf">DCD</span>     <span class="mi">0</span>                          <span class="c1">; Reserved</span>
+                <span class="nf">DCD</span>     <span class="mi">0</span>                          <span class="c1">; Reserved</span>
+                <span class="nf">DCD</span>     <span class="mi">0</span>                          <span class="c1">; Reserved</span>
+                <span class="nf">DCD</span>     <span class="mi">0</span>                          <span class="c1">; Reserved</span>
+                <span class="nf">DCD</span>     <span class="nv">TIM5_IRQHandler</span>            <span class="c1">; TIM5</span>
+                <span class="nf">DCD</span>     <span class="nb">SP</span><span class="nv">I3_IRQHandler</span>            <span class="c1">; SPI3</span>
+                <span class="nf">DCD</span>     <span class="nv">UART4_IRQHandler</span>           <span class="c1">; UART4</span>
+                <span class="nf">DCD</span>     <span class="nv">UART5_IRQHandler</span>           <span class="c1">; UART5</span>
+                <span class="nf">DCD</span>     <span class="nv">TIM6_IRQHandler</span>            <span class="c1">; TIM6</span>
+                <span class="nf">DCD</span>     <span class="nv">TIM7_IRQHandler</span>            <span class="c1">; TIM7</span>
+                <span class="nf">DCD</span>     <span class="nv">DMA2_Channel1_IRQHandler</span>   <span class="c1">; DMA2 Channel1</span>
+                <span class="nf">DCD</span>     <span class="nv">DMA2_Channel2_IRQHandler</span>   <span class="c1">; DMA2 Channel2</span>
+                <span class="nf">DCD</span>     <span class="nv">DMA2_Channel3_IRQHandler</span>   <span class="c1">; DMA2 Channel3</span>
+                <span class="nf">DCD</span>     <span class="nv">DMA2_Channel4_IRQHandler</span>   <span class="c1">; DMA2 Channel4</span>
+                <span class="nf">DCD</span>     <span class="nv">DMA2_Channel5_IRQHandler</span>   <span class="c1">; DMA2 Channel5</span>
+                <span class="nf">DCD</span>     <span class="nv">ETH_IRQHandler</span>             <span class="c1">; Ethernet</span>
+                <span class="nf">DCD</span>     <span class="nv">ETH_WKUP_IRQHandler</span>        <span class="c1">; Ethernet Wakeup through EXTI line</span>
+                <span class="nf">DCD</span>     <span class="nv">CAN2_TX_IRQHandler</span>         <span class="c1">; CAN2 TX</span>
+                <span class="nf">DCD</span>     <span class="nv">CAN2_RX0_IRQHandler</span>        <span class="c1">; CAN2 RX0</span>
+                <span class="nf">DCD</span>     <span class="nv">CAN2_RX1_IRQHandler</span>        <span class="c1">; CAN2 RX1</span>
+                <span class="nf">DCD</span>     <span class="nv">CAN2_SCE_IRQHandler</span>        <span class="c1">; CAN2 SCE</span>
+                <span class="nf">DCD</span>     <span class="nv">OTG_FS_IRQHandler</span>          <span class="c1">; USB OTG FS</span>
+<span class="nf">__Vectors_End</span>
+
+<span class="no">__Vectors_Size</span><span class="kd">  EQU</span>  <span class="nv">__Vectors_End</span> <span class="o">-</span> <span class="nv">__Vectors</span>
+
+                <span class="nf">AREA</span>    <span class="o">|</span><span class="nv">.text</span><span class="o">|</span><span class="p">,</span> <span class="nv">CODE</span><span class="p">,</span> <span class="nv">READONLY</span>
+
+<span class="c1">; Reset handler</span>
+<span class="nf">Reset_Handler</span>    <span class="nv">PROC</span>
+                 <span class="k">EXPORT</span>  <span class="nv">Reset_Handler</span>             <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+        <span class="k">IMPORT</span>  <span class="nv">SystemInit</span>
+        <span class="k">IMPORT</span>  <span class="nv">__main</span>
+                 <span class="nf">LDR</span>     <span class="nv">R0</span><span class="p">,</span> <span class="err">=</span><span class="nv">SystemInit</span>
+                 <span class="nf">BLX</span>     <span class="nv">R0</span>
+                 <span class="nf">LDR</span>     <span class="nv">R0</span><span class="p">,</span> <span class="err">=</span><span class="nv">__main</span>
+                 <span class="nf">BX</span>      <span class="nv">R0</span>
+                 <span class="nf">ENDP</span>
+
+<span class="c1">; Dummy Exception Handlers (infinite loops which can be modified)</span>
+
+<span class="nf">NMI_Handler</span>     <span class="nv">PROC</span>
+                <span class="k">EXPORT</span>  <span class="nv">NMI_Handler</span>                <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="nf">B</span>       <span class="nv">.</span>
+                <span class="nf">ENDP</span>
+<span class="nf">HardFault_Handler</span><span class="err">\</span>
+                <span class="nf">PROC</span>
+                <span class="k">EXPORT</span>  <span class="nv">HardFault_Handler</span>          <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="nf">B</span>       <span class="nv">.</span>
+                <span class="nf">ENDP</span>
+<span class="nf">MemManage_Handler</span><span class="err">\</span>
+                <span class="nf">PROC</span>
+                <span class="k">EXPORT</span>  <span class="nv">MemManage_Handler</span>          <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="nf">B</span>       <span class="nv">.</span>
+                <span class="nf">ENDP</span>
+<span class="nf">BusFault_Handler</span><span class="err">\</span>
+                <span class="nf">PROC</span>
+                <span class="k">EXPORT</span>  <span class="nv">BusFault_Handler</span>           <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="nf">B</span>       <span class="nv">.</span>
+                <span class="nf">ENDP</span>
+<span class="nf">UsageFault_Handler</span><span class="err">\</span>
+                <span class="nf">PROC</span>
+                <span class="k">EXPORT</span>  <span class="nv">UsageFault_Handler</span>         <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="nf">B</span>       <span class="nv">.</span>
+                <span class="nf">ENDP</span>
+<span class="nf">SVC_Handler</span>     <span class="nv">PROC</span>
+                <span class="k">EXPORT</span>  <span class="nv">SVC_Handler</span>                <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="nf">B</span>       <span class="nv">.</span>
+                <span class="nf">ENDP</span>
+<span class="nf">DebugMon_Handler</span><span class="err">\</span>
+                <span class="nf">PROC</span>
+                <span class="k">EXPORT</span>  <span class="nv">DebugMon_Handler</span>           <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="nf">B</span>       <span class="nv">.</span>
+                <span class="nf">ENDP</span>
+<span class="nf">PendSV_Handler</span>  <span class="nv">PROC</span>
+                <span class="k">EXPORT</span>  <span class="nv">PendSV_Handler</span>             <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="nf">B</span>       <span class="nv">.</span>
+                <span class="nf">ENDP</span>
+<span class="nf">SysTick_Handler</span> <span class="nv">PROC</span>
+                <span class="k">EXPORT</span>  <span class="nv">SysTick_Handler</span>            <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="nf">B</span>       <span class="nv">.</span>
+                <span class="nf">ENDP</span>
+
+<span class="nf">Default_Handler</span> <span class="nv">PROC</span>
+
+                <span class="k">EXPORT</span>  <span class="nv">WWDG_IRQHandler</span>            <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">PVD_IRQHandler</span>             <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">TAMPER_IRQHandler</span>          <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">RTC_IRQHandler</span>             <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">FLASH_IRQHandler</span>           <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">RCC_IRQHandler</span>             <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">EXTI0_IRQHandler</span>           <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">EXTI1_IRQHandler</span>           <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">EXTI2_IRQHandler</span>           <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">EXTI3_IRQHandler</span>           <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">EXTI4_IRQHandler</span>           <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">DMA1_Channel1_IRQHandler</span>   <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">DMA1_Channel2_IRQHandler</span>   <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">DMA1_Channel3_IRQHandler</span>   <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">DMA1_Channel4_IRQHandler</span>   <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">DMA1_Channel5_IRQHandler</span>   <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">DMA1_Channel6_IRQHandler</span>   <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">DMA1_Channel7_IRQHandler</span>   <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">ADC1_2_IRQHandler</span>          <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">CAN1_TX_IRQHandler</span>         <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">CAN1_RX0_IRQHandler</span>        <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">CAN1_RX1_IRQHandler</span>        <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">CAN1_SCE_IRQHandler</span>        <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">EXTI9_5_IRQHandler</span>         <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">TIM1_BRK_IRQHandler</span>        <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">TIM1_UP_IRQHandler</span>         <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">TIM1_TRG_COM_IRQHandler</span>    <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">TIM1_CC_IRQHandler</span>         <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">TIM2_IRQHandler</span>            <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">TIM3_IRQHandler</span>            <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">TIM4_IRQHandler</span>            <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">I2C1_EV_IRQHandler</span>         <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">I2C1_ER_IRQHandler</span>         <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">I2C2_EV_IRQHandler</span>         <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">I2C2_ER_IRQHandler</span>         <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nb">SP</span><span class="nv">I1_IRQHandler</span>            <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nb">SP</span><span class="nv">I2_IRQHandler</span>            <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">USART1_IRQHandler</span>          <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">USART2_IRQHandler</span>          <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">USART3_IRQHandler</span>          <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">EXTI15_10_IRQHandler</span>       <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">RTCAlarm_IRQHandler</span>        <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">OTG_FS_WKUP_IRQHandler</span>     <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">TIM5_IRQHandler</span>            <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nb">SP</span><span class="nv">I3_IRQHandler</span>            <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">UART4_IRQHandler</span>           <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">UART5_IRQHandler</span>           <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">TIM6_IRQHandler</span>            <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">TIM7_IRQHandler</span>            <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">DMA2_Channel1_IRQHandler</span>   <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">DMA2_Channel2_IRQHandler</span>   <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">DMA2_Channel3_IRQHandler</span>   <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">DMA2_Channel4_IRQHandler</span>   <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">DMA2_Channel5_IRQHandler</span>   <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">ETH_IRQHandler</span>             <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">ETH_WKUP_IRQHandler</span>        <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">CAN2_TX_IRQHandler</span>         <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">CAN2_RX0_IRQHandler</span>        <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">CAN2_RX1_IRQHandler</span>        <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">CAN2_SCE_IRQHandler</span>        <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">OTG_FS_IRQHandler</span>          <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+
+<span class="nf">WWDG_IRQHandler</span>
+<span class="nf">PVD_IRQHandler</span>
+<span class="nf">TAMPER_IRQHandler</span>
+<span class="nf">RTC_IRQHandler</span>
+<span class="nf">FLASH_IRQHandler</span>
+<span class="nf">RCC_IRQHandler</span>
+<span class="nf">EXTI0_IRQHandler</span>
+<span class="nf">EXTI1_IRQHandler</span>
+<span class="nf">EXTI2_IRQHandler</span>
+<span class="nf">EXTI3_IRQHandler</span>
+<span class="nf">EXTI4_IRQHandler</span>
+<span class="nf">DMA1_Channel1_IRQHandler</span>
+<span class="nf">DMA1_Channel2_IRQHandler</span>
+<span class="nf">DMA1_Channel3_IRQHandler</span>
+<span class="nf">DMA1_Channel4_IRQHandler</span>
+<span class="nf">DMA1_Channel5_IRQHandler</span>
+<span class="nf">DMA1_Channel6_IRQHandler</span>
+<span class="nf">DMA1_Channel7_IRQHandler</span>
+<span class="nf">ADC1_2_IRQHandler</span>
+<span class="nf">CAN1_TX_IRQHandler</span>
+<span class="nf">CAN1_RX0_IRQHandler</span>
+<span class="nf">CAN1_RX1_IRQHandler</span>
+<span class="nf">CAN1_SCE_IRQHandler</span>
+<span class="nf">EXTI9_5_IRQHandler</span>
+<span class="nf">TIM1_BRK_IRQHandler</span>
+<span class="nf">TIM1_UP_IRQHandler</span>
+<span class="nf">TIM1_TRG_COM_IRQHandler</span>
+<span class="nf">TIM1_CC_IRQHandler</span>
+<span class="nf">TIM2_IRQHandler</span>
+<span class="nf">TIM3_IRQHandler</span>
+<span class="nf">TIM4_IRQHandler</span>
+<span class="nf">I2C1_EV_IRQHandler</span>
+<span class="nf">I2C1_ER_IRQHandler</span>
+<span class="nf">I2C2_EV_IRQHandler</span>
+<span class="nf">I2C2_ER_IRQHandler</span>
+<span class="nf">SPI1_IRQHandler</span>
+<span class="nf">SPI2_IRQHandler</span>
+<span class="nf">USART1_IRQHandler</span>
+<span class="nf">USART2_IRQHandler</span>
+<span class="nf">USART3_IRQHandler</span>
+<span class="nf">EXTI15_10_IRQHandler</span>
+<span class="nf">RTCAlarm_IRQHandler</span>
+<span class="nf">OTG_FS_WKUP_IRQHandler</span>
+<span class="nf">TIM5_IRQHandler</span>
+<span class="nf">SPI3_IRQHandler</span>
+<span class="nf">UART4_IRQHandler</span>
+<span class="nf">UART5_IRQHandler</span>
+<span class="nf">TIM6_IRQHandler</span>
+<span class="nf">TIM7_IRQHandler</span>
+<span class="nf">DMA2_Channel1_IRQHandler</span>
+<span class="nf">DMA2_Channel2_IRQHandler</span>
+<span class="nf">DMA2_Channel3_IRQHandler</span>
+<span class="nf">DMA2_Channel4_IRQHandler</span>
+<span class="nf">DMA2_Channel5_IRQHandler</span>
+<span class="nf">ETH_IRQHandler</span>
+<span class="nf">ETH_WKUP_IRQHandler</span>
+<span class="nf">CAN2_TX_IRQHandler</span>
+<span class="nf">CAN2_RX0_IRQHandler</span>
+<span class="nf">CAN2_RX1_IRQHandler</span>
+<span class="nf">CAN2_SCE_IRQHandler</span>
+<span class="nf">OTG_FS_IRQHandler</span>
+
+                <span class="nf">B</span>       <span class="nv">.</span>
+
+                <span class="nf">ENDP</span>
+
+                <span class="k">ALIGN</span>
+
+<span class="c1">;*******************************************************************************</span>
+<span class="c1">; User Stack and Heap initialization</span>
+<span class="c1">;*******************************************************************************</span>
+                 <span class="nf">IF</span>      <span class="p">:</span><span class="nv">DEF</span><span class="p">:</span><span class="nv">__MICROLIB</span>
+                
+                 <span class="k">EXPORT</span>  <span class="nv">__initial_sp</span>
+                 <span class="k">EXPORT</span>  <span class="nv">__heap_base</span>
+                 <span class="k">EXPORT</span>  <span class="nv">__heap_limit</span>
+                
+                 <span class="nf">ELSE</span>
+                
+                 <span class="k">IMPORT</span>  <span class="nv">__use_two_region_memory</span>
+                 <span class="k">EXPORT</span>  <span class="nv">__user_initial_stackheap</span>
+                 
+<span class="nf">__user_initial_stackheap</span>
+
+                 <span class="nf">LDR</span>     <span class="nv">R0</span><span class="p">,</span> <span class="err">=</span>  <span class="nv">Heap_Mem</span>
+                 <span class="nf">LDR</span>     <span class="nv">R1</span><span class="p">,</span> <span class="err">=</span><span class="p">(</span><span class="nv">Stack_Mem</span> <span class="o">+</span> <span class="nv">Stack_Size</span><span class="p">)</span>
+                 <span class="nf">LDR</span>     <span class="nv">R2</span><span class="p">,</span> <span class="err">=</span> <span class="p">(</span><span class="nv">Heap_Mem</span> <span class="o">+</span>  <span class="nv">Heap_Size</span><span class="p">)</span>
+                 <span class="nf">LDR</span>     <span class="nv">R3</span><span class="p">,</span> <span class="err">=</span> <span class="nv">Stack_Mem</span>
+                 <span class="nf">BX</span>      <span class="nv">LR</span>
+
+                 <span class="k">ALIGN</span>
+
+                 <span class="nf">ENDIF</span>
+
+                 <span class="nf">END</span>
+</code></pre></div></div>]]></content><author><name></name></author><category term="embedded"/><summary type="html"><![CDATA[The startup code in an embedded system plays a vital role in initializing the hardware and setting up the execution environment upon system power-on or reset.]]></summary></entry><entry><title type="html">What is a microcontroller?</title><link href="https://mbozdal.github.io/blog/2023/microcontroller/" rel="alternate" type="text/html" title="What is a microcontroller?"/><published>2023-07-11T17:39:00+00:00</published><updated>2023-07-11T17:39:00+00:00</updated><id>https://mbozdal.github.io/blog/2023/microcontroller</id><content type="html" xml:base="https://mbozdal.github.io/blog/2023/microcontroller/"><![CDATA[<h1 id="what-is-a-microcontroller">What is a microcontroller?</h1> <p>A microcontroller, often abbreviated as MCU, is a compact computer system integrated into a single chip. It combines various components, including a central processing unit (CPU), memory, and input/output peripherals, into a small and efficient package.</p> <p><strong>Figure 1.</strong> <em>System architecture of STM32F1x Series</em></p> <figure> <picture> <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/assets/img/system_architecture_stm32-480.webp"/> <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/assets/img/system_architecture_stm32-800.webp"/> <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/assets/img/system_architecture_stm32-1400.webp"/> <img src="/assets/img/system_architecture_stm32.png" width="auto" height="auto" title="System architecture of STM32F1x Series" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <p>Figure 1 shows the system architecture of STM321x family MCUs, the one we will use in the labs. Check the following components in the architecture.</p> <p><strong>Components of a Microcontroller:</strong></p> <ol> <li><strong>CPU:</strong> At the heart of the microcontroller is the central processing unit (CPU), which executes instructions and performs calculations. The CPU is responsible for the overall control and operation of the microcontroller. STM321x series has Arm Cortex-M3 processors.</li> <li><strong>Clock Source:</strong> A microcontroller needs the clock signal for synchronization and timing of operations within the microcontroller (it may have a built-in oscillator). The clock source determines the speed at which the CPU and other components operate. There are various clock sources you can configure under Reset &amp; Clock Control subsystem.</li> <li><strong>Memory:</strong> Microcontrollers typically include two types of memory. The <strong>flash memory</strong> holds the program code, often in the range of kilobytes to megabytes, which is non-volatile, meaning it retains the code even when power is removed. The <strong>RAM (Random Access Memory)</strong> provides temporary storage for data and variables during program execution. Cortex-M3 has Harvard architecture which allows the processor to access the data memory and the instruction memory concurrently.</li> <li><strong>Input/Output (I/O) Peripherals:</strong> Microcontrollers feature a variety of I/O peripherals that facilitate communication with the external world. These peripherals include digital input/output (I/O) pins, analog-to-digital converters (ADCs) for reading analog signals, digital-to-analog converters (DACs) for generating analog output, timers for timing operations, and special digital lines such as pulse-width modulation (PWM) for controlling devices like motors or LEDs.</li> <li><strong>Communication Interfaces:</strong> Microcontrollers offer communication interfaces to interact with other devices, sensors, and actuators. These interfaces include Universal Serial Bus (USB), Universal Asynchronous Receiver-Transmitter (UART), Serial Peripheral Interface (SPI), Controller Area Network (CAN), Ethernet, and wireless protocols like Wi-Fi and Bluetooth.</li> </ol> <p><strong>Programming Microcontrollers:</strong></p> <p>Microcontrollers are programmed to execute a set of instructions, commonly referred to as firmware. This firmware guides the microcontroller’s behavior and controls its various functions. Unlike general-purpose computers, microcontrollers often operate without an operating system and run the firmware directly in a bare-metal environment.</p> <p>Developers typically write firmware in programming languages such as C/C++ or assembly language. They utilize specialized development tools running on a host computer, which includes a compiler to convert the code into machine language, a hardware tool (programmer) to transfer the firmware into the microcontroller’s flash memory, and an optional in-circuit debugger for testing and debugging.</p> <p>Upon power-up, the microcontroller begins executing the firmware from the main() function, initializing the system and performing the programmed tasks.</p> <p><strong>Applications of Microcontrollers:</strong></p> <p>Microcontrollers find applications in various fields, including consumer electronics, industrial automation, automotive systems, medical devices, and Internet of Things (IoT) devices. They provide the necessary intelligence and control to these devices, enabling them to perform specific functions reliably and efficiently.</p> <p>In conclusion, microcontrollers serve as the core processing unit in countless electronic devices, offering a combination of CPU, memory, and peripheral functionalities. Their compact size, low power consumption, and versatility make them an essential component for embedded systems and enable the development of innovative and intelligent electronic devices.</p> <p><strong>Additional Resources:</strong></p> <p><a href="https://www.nxp.com/files-static/microcontrollers/doc/ref_manual/M68HC05TB.pdf">M68HC05 Family - Understanding Small Microcontrollers</a></p>]]></content><author><name></name></author><category term="embedded"/><summary type="html"><![CDATA[A microcontroller, often abbreviated as MCU, is a compact computer system integrated into a single chip.]]></summary></entry><entry><title type="html">The Arm Architecture</title><link href="https://mbozdal.github.io/blog/2023/arm_architecture/" rel="alternate" type="text/html" title="The Arm Architecture"/><published>2023-07-07T17:39:00+00:00</published><updated>2023-07-07T17:39:00+00:00</updated><id>https://mbozdal.github.io/blog/2023/arm_architecture</id><content type="html" xml:base="https://mbozdal.github.io/blog/2023/arm_architecture/"><![CDATA[<h1 id="arm">Arm</h1> <p><a href="https://www.arm.com/company">Arm</a> is a semiconductor and software design company headquartered in Cambridge, England. It is a fabless company, which means that it does not manufacture silicon. Instead, Arm develops the architectures and licenses them to other companies. One of the advantages of Arm processors is that they are designed for low costs, minimal power consumption, and lower heat generation. These features make Arm processors highly desirable for light, portable, battery-powered devices including smartphones, laptops, tablet computers, and embedded systems.</p> <p>The Arm architecture is based on the Reduced Instruction Set Computing (RISC) approach, which emphasizes simplicity and efficiency in instruction execution. Arm offers a variety of processors, including Cortex-A, Cortex-R, Cortex-M, Neoverse, and SecurCore. The Cortex-A processors are designed for high performance and are commonly found in smartphones and tablets. Cortex-R processors are used for real-time applications, such as in automotive systems. Cortex-M processors are designed for microcontrollers and other low-power, cost-sensitive applications. Neoverse processors are designed for cloud-to-edge infrastructure, while SecurCore processors excel in providing anti-tampering features for smart card applications.</p> <p>As I use <a href="https://www.st.com/en/microcontrollers-microprocessors/stm32f107vc.html">STM32F107VC</a> MCUs in the lectures, my focus will primarily be on <a href="https://developer.arm.com/Processors/Cortex-M3">Arm Cortex-M3</a> MCUs. For a detailed comparison of the different Arm Cortex families, you can refer to <a href="https://microchipdeveloper.com/32arm:differences-among-arm-cortex-families">Differences Among Arm® Cortex® Families</a>.</p> <p><img src="https://s3-us-west-2.amazonaws.com/secure.notion-static.com/82fff374-7d0a-4831-92fa-2a0e5ce68b01/Untitled.png" alt="Untitled"/></p> <p>Armv7 refers to the seventh version of the Arm architecture, specifically a 32-bit instruction set architecture (ISA). ARMv7 gained widespread adoption and compatibility across various devices. ARMv7 introduced significant improvements and features such as the Thumb-2 instruction set, TrustZone security extension, virtualization support, and the NEON (Advanced SIMD) instruction set extension for multimedia and signal processing tasks.</p> <p>The Thumb-2 instruction set is a notable extension within the Arm architecture. It combines the benefits of both the traditional Arm (32-bit) and compact Thumb (16-bit) instruction sets. It offers improved code density by allowing more instructions to fit in a given memory space. Thumb-2 instructions can switch between 16-bit and 32-bit modes seamlessly, offering flexibility in instruction size based on the complexity of the operation. This extension retains compatibility with existing Thumb code and provides access to the full functionality and performance of the ARM instruction set when required.</p> <p>Overall, Arm’s architecture, combined with its diverse processor offerings and extensive features, has made it a popular choice in various industries and applications. The focus on low power consumption, efficiency, and compatibility has enabled Arm processors to thrive in the market, powering a wide range of devices and systems.</p> <p>Additional Resources:</p> <p>ARM Architecture Reference Manual</p> <p><a href="https://community.arm.com/arm-community-blogs/b/architectures-and-processors-blog/posts/cortex-m-resources#intro">Cortex-M resources</a></p> <p>Coursera course to follow: <a href="https://www.coursera.org/learn/arm-cortex-m-processors-overview-course1">Arm Cortex-M Processors Overview</a></p>]]></content><author><name></name></author><category term="embedded"/><summary type="html"><![CDATA[Explore the Arm architecture, processors, and the Thumb-2 instruction set that provide low-cost, efficient, and versatile computing for a wide range of devices and applications.]]></summary></entry><entry><title type="html">A Beginner’s Guide to Embedded Systems</title><link href="https://mbozdal.github.io/blog/2023/intro-embedded/" rel="alternate" type="text/html" title="A Beginner’s Guide to Embedded Systems"/><published>2023-07-03T17:39:00+00:00</published><updated>2023-07-03T17:39:00+00:00</updated><id>https://mbozdal.github.io/blog/2023/intro-embedded</id><content type="html" xml:base="https://mbozdal.github.io/blog/2023/intro-embedded/"><![CDATA[<p>Embedded systems are an integral part of various technological advancements, including smart devices, wearables, autonomous vehicles, and industrial automation. As the popularity of these systems continues to grow, many students have expressed their interest in learning embedded systems. In response to these inquiries, I have written this blog post to provide a beginner’s guide for learning embedded systems.</p> <h3 id="what-are-embedded-systems">What Are Embedded Systems?</h3> <p>Embedded systems are small computer systems, typically powered by microcontrollers, that are integrated into everyday devices. They are specifically designed to perform <strong>a dedicated task</strong> efficiently and intelligently. Due to their specialized nature, embedded systems are optimized to deliver excellent performance even with limited resources.</p> <p>These systems are often concealed or “embedded” within the devices they power, such as remote controllers, smart appliances, robots, or automotive systems. Embedded systems play a vital role in various industries and have a significant impact on our daily lives. They enable the seamless operation of numerous devices and technologies that we rely on, enhancing convenience, efficiency, and functionality.</p> <p>A pacemaker is a good example of an embedded system that is implanted in the body to regulate the heart’s electrical activity. It is specifically engineered to operate reliably and autonomously within the body, demonstrating the remarkable capabilities of embedded technology in critical medical applications. Due to their internal placement, pacemakers must efficiently utilize power resources to ensure prolonged operation without the need for frequent battery replacements.</p> <div class="col-sm mt-3 mt-md-0"> <figure> <picture> <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/assets/img/pacemaker-480.webp"/> <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/assets/img/pacemaker-800.webp"/> <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/assets/img/pacemaker-1400.webp"/> <img src="/assets/img/pacemaker.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" title="Pace maker" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> </div> <p>[1] <a href="https://www.bhf.org.uk/informationsupport/heart-matters-magazine/medical/how-does-a-pacemaker-work">How does a pacemaker work?</a></p> <p>[2] <a href="https://johnsonfrancis.org/professional/dual-chamber-pacemaker-chest-x-ray/">Dual Chamber Pacemaker - Chest X-RAY</a></p> <h3 id="learn-programming">Learn Programming</h3> <p>When it comes to programming embedded systems, the primary languages to focus on are C and C++. These languages provide low-level control and efficient hardware interaction, making them ideal for embedded systems development. Start by familiarizing yourself with data types, control structures, functions, and pointers.</p> <p>It’s important to note that embedded systems often run on bare metal, meaning they don’t have operating systems like desktop computers or smartphones. They directly interact with the hardware without the abstraction layer of an operating system. This requires a deep understanding of the hardware and the ability to write efficient and optimized code.</p> <p>For additional resources, consider the following:</p> <ul> <li>Learn how to choose the right embedded programming language through this informative post: <a href="https://www.beningo.com/5-recommendations-for-selecting-the-right-embedded-programming-langauge/">5 Recommendations for Selecting the Right Embedded Programming Language</a></li> <li>Watch a video that clears up misconceptions about C/C++ vs. embedded C/C++: <a href="https://www.youtube.com/watch?v=KQBBWvY-s0o&amp;ab_channel=JacobSorber">What Actually is Embedded C/C++? Is it different from C/C++?</a></li> </ul> <h3 id="choose-a-development-platform"><strong>Choose a development platform</strong></h3> <p>A microcontroller serves as the heart of an embedded system. Selecting the right microcontroller is crucial in embedded systems development. A microcontroller serves as the heart of an embedded system, providing the processing power and control necessary for your project. Popular options include STM32, TI MSP430, Raspberry Pico, and Arduino, while open source RISC-V architecture is also gaining popularity, although it may be more suitable for experienced users.</p> <p>When choosing a microcontroller, consider your project requirements and explore different options before making a decision. While Arduino is widely popular and easy to program, it abstracts the hardware details, making it harder to understand how things work. Instead, I recommended to choose an Arm microcontroller and programming it at a lower level using register-based programming. This gives you a better understanding of the hardware. It may be a bit challenging at first, but it helps you gain valuable insights into how the system functions. For guidance in selecting a microcontroller, refer to the comprehensive guide: <a href="https://community.arm.com/arm-community-blogs/b/embedded-blog/posts/10-steps-to-selecting-a-microcontroller">10 Steps to Selecting a Microcontroller.</a></p> <p>An important part of specializing in embedded systems is being able to read and understand datasheets, despite their potentially tedious nature. Datasheets provide important information about the microcontroller’s features, pin configurations, and other specifications that help you make informed decisions when designing your system.</p> <p>To streamline the development process, it is often advantageous to purchase a development board. This enables you to focus on the coding aspect while providing the necessary hardware interface for testing and prototyping.</p> <h3 id="get-hands-on-experience">Get Hands-on Experience</h3> <p>To fully grasp embedded systems, it’s essential to gain hands-on experience with hardware components such as sensors, actuators, displays, and communication modules. Familiarize yourself with their specifications, interfaces, and protocols by exploring datasheets and reference manuals. As you delve into practical projects, start with small and simple tasks like blinking an LED or reading sensor data to solidify your understanding of the basics. Gradually progress to more challenging projects, leveraging experimentation and troubleshooting to learn valuable lessons along the way. Practical experience is key to mastering embedded systems.</p> <p>Remember, learning embedded systems is a journey that requires dedication and continuous practice. Embrace challenges, seek knowledge, and enjoy the process of mastering this exciting field. Good luck on your embedded systems learning journey!</p> <p><strong>Additional Resources:</strong></p> <ul> <li><a href="https://embeddedartistry.com/beginners/">Resources for beginners</a></li> <li><a href="https://www.youtube.com/playlist?list=PLPW8O6W-1chwyTzI3BHwBLbGQoPFxPAPM">Modern Embedded Systems Programming Course</a></li> <li>Embedded Systems with ARM Cortex-M Microcontrollers in Assembly Language and C - Yifeng Zhu</li> <li>Introduction to ARM Cortex-M Microcontrollers - Jonathan W. Valvano</li> </ul>]]></content><author><name></name></author><category term="embedded"/><summary type="html"><![CDATA[This beginner's guide to embedded systems explains what they are, why they matter, and provides programming tips, guidance on choosing a microcontroller, and advice for getting hands-on experience.]]></summary></entry></feed>
