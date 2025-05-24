@@ -16,7 +16,8 @@ news: false  # includes a list of news items
 selected_papers: false # includes a list of papers marked as "selected={true}"
 social: true  # includes social icons at the bottom of the page
 ---
-I am a Research Fellow at the University of Birmingham, engaged in the HI-ACT (Hydrogen Integration for Accelerated Energy Transitions) project, and
+I am a Research Fellow at the University of Birmingham, engaged in the HI-ACT 
+(Hydrogen Integration for Accelerated Energy Transitions) project, and
  an Assistant Professor at Abdullah Gül University,
  and my research interests include in-vehicle communication,
  cyber-physical systems security, embedded systems, and the internet
