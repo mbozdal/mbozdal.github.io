@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cortex-M Architecture</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <script>
+    (function() {
+      try {
+        var saved = localStorage.getItem('darkMode');
+        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if(saved === 'on' || (saved === null && prefersDark)) {
+          document.documentElement.classList.add('dark-mode');
+        } else {
+          document.documentElement.classList.remove('dark-mode');
+        }
+      } catch(e) {}
+    })();
+  </script>
+</head>
+<body>
+  <button id="dark-mode-toggle" title="Toggle dark mode" style="position:fixed;top:16px;right:16px;z-index:200;background:none;border:none;cursor:pointer;outline:none;">
+    <img id="dark-mode-icon" src="/assets/img/icons/dark-mode.png" alt="Toggle dark mode" width="24" height="24" style="vertical-align:middle;" />
+  </button>
+  
+  <div id="site-wrapper">
+    <button id="mobile-menu-toggle" aria-label="Open Menu">
+  <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+</button>
+
+<aside id="sidebar">
+  <div class="sidebar-header">
+    <button id="sidebar-toggle" aria-label="Toggle Sidebar">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+    </button>
+  </div>
+
+  <div class="author-box">
+    <a href="/">
+      <img src="/assets/img/prof_pic.jpg" alt="Profile Photo" class="profile-image" />
+      <h2 class="author-name">Mehmet Bozdal</h2>
+    </a>
+  </div>
+
+  <ul class="nav">
+    <li>
+      <a href="/blog/" title="Blog">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+        <span class="nav-label">Blog</span>
+      </a>
+    </li>
+    <li>
+      <a href="/projects/" title="Projects">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 2l-5.5 9h11L12 2zm0 3.84L13.93 9h-3.87L12 5.84zM17.5 13c-2.49 0-4.5 2.01-4.5 4.5s2.01 4.5 4.5 4.5 4.5-2.01 4.5-4.5-2.01-4.5-4.5-4.5zm0 7c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5zM3 21.5h8v-8H3v8zm2-6h4v4H5v-4z"/></svg>
+        <span class="nav-label">Projects</span>
+      </a>
+    </li>
+    <li>
+      <a href="/teaching/" title="Teaching">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>
+        <span class="nav-label">Teaching</span>
+      </a>
+    </li>
+    <li>
+      <a href="/publications/" title="Publications">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>
+        <span class="nav-label">Publications</span>
+      </a>
+    </li>
+  </ul>
+
+  <div class="social-icons">
+    <a href="mailto:mehmet.bozdal [at] agu.edu.tr" title="Email"><img src="/assets/img/icons/email.svg" alt="Email" width="24" height="24"></a>
+    <a href="https://www.linkedin.com/in/mbozdal/" title="LinkedIn" target="_blank"><img src="/assets/img/icons/linkedin.svg" alt="LinkedIn" width="24" height="24"></a>
+    <a href="https://scholar.google.com/citations?user=AR2tsh0AAAAJ" title="Google Scholar" target="_blank"><img src="/assets/img/icons/scholar.svg" alt="Scholar" width="24" height="24"></a>
+    <a href="https://x.com/simon_mehmet" title="Twitter" target="_blank"><img src="/assets/img/icons/twitter.svg" alt="Twitter" width="24" height="24"></a>
+    <a href="https://www.researchgate.net/profile/Mehmet-Bozdal" title="ResearchGate" target="_blank"><img src="/assets/img/icons/researchgate.svg" alt="ResearchGate" width="24" height="24"></a>
+  </div>
+</aside>
+
+<div id="sidebar-overlay"></div>
+
+<script>
+(function() {
+  const sidebar = document.getElementById('sidebar');
+  const toggle = document.getElementById('sidebar-toggle');
+  const mobileToggle = document.getElementById('mobile-menu-toggle');
+  const overlay = document.getElementById('sidebar-overlay');
+  
+  // Apply persistence
+  const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+  if (isCollapsed && window.innerWidth > 768) {
+    sidebar.classList.add('collapsed');
+  }
+  
+  // Unified toggle function
+  const toggleSidebar = () => {
+    sidebar.classList.toggle('collapsed');
+    localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+  };
+
+  toggle.addEventListener('click', toggleSidebar);
+  
+  mobileToggle.addEventListener('click', () => {
+    sidebar.classList.add('mobile-active');
+    overlay.classList.add('active');
+  });
+  
+  overlay.addEventListener('click', () => {
+    sidebar.classList.remove('mobile-active');
+    overlay.classList.remove('active');
+  });
+
+  // Highlight active link
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.nav a').forEach(link => {
+    const href = link.getAttribute('href');
+    if (href !== '/' && currentPath.startsWith(href)) {
+      link.classList.add('active');
+    } else if (href === '/' && currentPath === '/') {
+      link.classList.add('active');
+    }
+  });
+})();
+</script>
+
+
+    
+    <main id="main-content">
+      
+      
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Cortex-M Architecture</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2023-08-09T20:39:00+03:00" itemprop="datePublished">Aug 9, 2023
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>The ArmCortex-M3 microcontroller architecture follows the Harvard architecture design, separating memory into distinct areas for instructions and data. This allows for simultaneous access to both instruction memory and data memory, leading to improved performance.</p>
+
+<figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/system_architecture_stm32.JPG" width="auto" height="auto" style="max-width: 100%; max-height: 500px;" title="System architecture of STM32F1x Series" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+
+  </picture>
+
+</figure>
+
+<p>The Cortex-M instruction set includes the “Thumb” instruction set, which is a 16-bit compact encoding of instructions. This allows for more instructions to fit into a smaller memory space. Thumb-2 further extends this concept, allowing a mix of 16-bit and 32-bit instructions for better code density and performance.</p>
+
+<p>The Cortex-M3 microcontroller architecture employs distinct buses and features for different tasks, contributing to its efficient operation in embedded systems:</p>
+
+<ol>
+  <li><strong>ICode Bus</strong>: This bus is responsible for fetching instructions from memory, typically from a flash ROM. This is the pathway through which the processor retrieves program code for execution.</li>
+  <li><strong>DCode Bus</strong>: The DCode bus is used for debugging purposes. It provides a pathway for advanced debugging features, allowing developers to interact with and analyze the behavior of the microcontroller during program execution.</li>
+  <li><strong>System Bus Interface</strong>: The system bus interface facilitates data exchange between the processor core and memory, as well as input/output (I/O) devices. It’s a critical bus for moving data around in the system.</li>
+  <li><strong>DMA (Direct Memory Access)</strong>: DMA is a mechanism that allows certain peripherals to directly access memory without involving the processor core. This enhances data transfer efficiency and offloads the CPU from managing data movement.</li>
+  <li><strong>AHB (Advanced High-performance Bus)</strong>: AHB is a high-performance bus protocol used to connect faster components in the system, like memory blocks, high-speed I/O (USB, Ethernet), and so on. It’s designed to handle higher bandwidth and provide better performance.</li>
+  <li><strong>APB (Advanced Peripheral Bus)</strong>: APB is a slower peripheral bus protocol used to connect slower peripherals in the system. It’s used for components that don’t require high-speed access and is more power-efficient.</li>
+</ol>
+
+<h2 id="registers">Registers</h2>
+
+<p>Registers are small fast storage areas within the CPU that are used to hold data temporarily during program execution. They are integral to various aspects of the processor’s functioning, such as data manipulation, control flow, and interaction with memory and peripherals.</p>
+
+<figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/core_registers.JPG" width="auto" height="auto" style="max-width: 100%; max-height: 500px;" title="Core Registers" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+
+  </picture>
+
+</figure>
+
+<p>The Core registers found in Arm microcontrollers are:</p>
+
+<ol>
+  <li><strong>General-Purpose Registers (GPRs)</strong>: R0-R12 are 32-bit general-purpose registers for data operations. These registers are used for general data manipulation. They store operands for arithmetic and logical operations, intermediate results, and function parameters.</li>
+  <li><strong>Stack Pointer (SP)</strong>: The SP (R13) register points to the top of the stack in memory. The stack is used to store temporary data during function calls, interrupt handling, and other operations. In Thread mode, bit[1] of the CONTROL register indicates the stack pointer to use:
+    <ul>
+      <li>0 = <em>Main Stack Pointer</em> (MSP). This is the reset value.</li>
+      <li>1 = <em>Process Stack Pointer</em> (PSP).</li>
+    </ul>
+
+    <p>On reset, the processor loads the MSP with the value from address <code class="language-plaintext highlighter-rouge">0x00000000</code>.</p>
+  </li>
+  <li><strong>Link Register (LR)</strong>: The LR (R14) register holds the return address for subroutines, function calls, and exceptions. It’s used to ensure that the program knows where to resume execution after the function call is complete. On reset, the processor sets the LR value to <code class="language-plaintext highlighter-rouge">0xFFFFFFFF.</code></li>
+  <li><strong>Program Counter (PC)</strong>: The PC (R15) register holds the address of the next instruction to be fetched and executed. It keeps track of the program’s execution progress. On reset, the processor loads the PC with the value of the reset vector, which is at address <code class="language-plaintext highlighter-rouge">0x00000004</code>. Bit[0] of the value is loaded into the EPSR T-bit at reset and must be 1.</li>
+  <li><strong>Program Status Registers (PSR)</strong>: The <em>Program Status Register</em> (PSR) combines:
+    <ul>
+      <li><em>Application Program Status Register</em> (APSR)</li>
+      <li><em>Interrupt Program Status Register</em> (IPSR)</li>
+      <li><em>Execution Program Status Register</em> (EPSR).</li>
+    </ul>
+
+    <p>These registers hold various flags and status information about the processor’s state. For example, they store the condition codes after arithmetic operations and control the processor’s execution mode.</p>
+
+    <p>These registers are mutually exclusive bitfields in the 32-bit PSR. The bit assignments are:</p>
+  </li>
+</ol>
+
+<figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/program_status_register.JPG" width="auto" height="auto" style="max-width: 100%; max-height: 500px;" title="Program Status Registers" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+
+  </picture>
+
+</figure>
+
+<p>The key components stored in the APSR:</p>
+
+<ol>
+  <li><strong>Negative Flag (N) - Bit [31]</strong>: This flag is set if the result of a signed operation is negative.</li>
+  <li><strong>Zero Flag (Z) - Bit [30]</strong>: This flag is set if the result of an operation is zero. It’s used in conditional branching and testing.</li>
+  <li><strong>Carry or Unsigned Overflow Flag (C) - Bit [29]</strong>: This flag is set if an operation generates a carry out from the most significant bit or an unsigned overflow condition.</li>
+  <li><strong>Overflow Flag (V) - Bit [28]</strong>: This flag is set if a signed operation results in an overflow condition.</li>
+  <li><strong>Q Flag - Bit [27]</strong>: It’s used in the context of saturation arithmetic (like Saturating Addition and Saturating Subtraction instructions).</li>
+  <li><strong>Exception Mask Registers:</strong> The exception mask registers disable the handling of exceptions by the processor. Disable exceptions where they might impact on timing critical tasks.
+    <ol>
+      <li><strong>Priority Mask Register (PRIMASK):</strong> The PRIMASK register prevents activation of all exceptions with configurable priority. Bit [0] of this register controls the activation of exceptions. Its behavior is as follows:
+        <ul>
+          <li>1 = prevents the activation of all exceptions with configurable priority.</li>
+          <li>0 = no effect</li>
+        </ul>
+      </li>
+      <li><strong>Fault Mask Register (FAULTMASK):</strong> The FAULTMASK register prevents activation of all exceptions except for <em>Non-Maskable Interrupt</em> (NMI).
+        <ul>
+          <li>1 = prevents the activation of all exceptions except for NMI.</li>
+          <li>0 = no effect</li>
+        </ul>
+      </li>
+      <li><strong>Base Priority Mask Register (BASEPRI):</strong> It is a special register used to control the priority level at which interrupts can preempt the currently executing code. It provides a mechanism for setting a “base” priority level below which certain interrupts will not preempt the execution of code at higher priority levels. Bit [7:0] of this register controls the behavior as follow:
+        <ul>
+          <li>0x 00 = no effect</li>
+          <li>Nonzero = defines the base priority for exception processing. The processor does not process any exception with a priority value greater than or equal to BASEPRI.</li>
+        </ul>
+
+        <p>Suppose we set BASEPRI to a value of 3. This means that interrupts with priority levels 0, 1, and 2 can still interrupt the ongoing task. However, requests at priority levels 3 and higher will be held off temporarily. In other words, only the most important interrupts below the threshold will be allowed to break into the execution of the current task.</p>
+      </li>
+    </ol>
+  </li>
+  <li><strong>CONTROL Register</strong>: The CONTROL register controls the stack used and the privilege level for software execution when the processor is in Thread mode. The CONTROL register bit **assignments are:</li>
+</ol>
+
+<table>
+  <thead>
+    <tr>
+      <th>Bits</th>
+      <th>Name</th>
+      <th>Function</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>[31:2]</td>
+      <td>-</td>
+      <td>Reserved.</td>
+    </tr>
+    <tr>
+      <td>[1]</td>
+      <td>SPSEL</td>
+      <td>Defines the currently active stack pointer: In Handler mode this bit reads as zero and ignores writes. The Cortex-M3 updates this bit automatically on exception return. <strong>0</strong> = MSP is the current stack pointer <strong>1</strong> = PSP is the current stack pointer.</td>
+    </tr>
+    <tr>
+      <td>[0]</td>
+      <td>nPRIV</td>
+      <td>Defines the Thread mode privilege level: <strong>0</strong> = Privileged <strong>1</strong> = Unprivileged.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Additional Resources:</strong></p>
+
+<p><a href="https://developer.arm.com/documentation/dui0552/a/the-cortex-m3-processor/programmers-model/core-registers?lang=en">Cortex-M3 Devices Generic User Guide</a></p>
+
+  </div><a class="u-url" href="/2023/08/09/cortex-m_architecture.html" hidden></a>
+</article>
+
+      
+    </main>
+  </div>
+
+  <footer>
+    <div class="container">
+      &copy; 2026 Mehmet Bozdal. All rights reserved.
+      <div class="footer-note">This site is built with support of LLM.</div>
+    </div>
+  </footer>
+
+  <script>
+  (function() {
+    // Dark mode logic
+    const toggle = document.getElementById('dark-mode-toggle');
+    const icon = document.getElementById('dark-mode-icon');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    function setDarkMode(on) {
+      if(on) {
+        document.documentElement.classList.add('dark-mode');
+        icon.src = '/assets/img/icons/light-mode.png';
+        icon.alt = 'Light mode';
+        localStorage.setItem('darkMode', 'on');
+      } else {
+        document.documentElement.classList.remove('dark-mode');
+        icon.src = '/assets/img/icons/dark-mode.png';
+        icon.alt = 'Dark mode';
+        localStorage.setItem('darkMode', 'off');
+      }
+    }
+    
+    const saved = localStorage.getItem('darkMode');
+    if(saved === 'on' || (saved === null && prefersDark)) setDarkMode(true);
+    else setDarkMode(false);
+    
+    toggle.onclick = function() {
+      setDarkMode(!document.documentElement.classList.contains('dark-mode'));
+    };
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+---
+layout: default
+---
+
+<div class="card">
+  <h1>{{ page.title }}</h1>
+  
+  {% if page.image %}
+  <img src="{{ page.image }}" alt="{{ page.title }}" class="project-image">
+  {% endif %}
+
+  <div class="project-meta">
+    {% if page.duration %}
+    <p><strong>Duration:</strong> {{ page.duration }}</p>
+    {% endif %}
+    
+    {% if page.team %}
+    <p><strong>Team:</strong> {{ page.team }}</p>
+    {% endif %}
+    
+    {% if page.funding %}
+    <p><strong>Funding:</strong> {{ page.funding }}</p>
+    {% endif %}
+
+  </div>
+
+  <div class="project-content">
+    {{ content }}
+  </div>
+
+  {% if page.links %}
+  <div class="project-links">
+    <h3>Related Links</h3>
+    <ul>
+      {% for link in page.links %}
+      <li><a href="{{ link.url }}" target="_blank">{{ link.name }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+</div> 

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BEiNG-WISE Training School</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <script>
+    (function() {
+      try {
+        var saved = localStorage.getItem('darkMode');
+        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if(saved === 'on' || (saved === null && prefersDark)) {
+          document.documentElement.classList.add('dark-mode');
+        } else {
+          document.documentElement.classList.remove('dark-mode');
+        }
+      } catch(e) {}
+    })();
+  </script>
+</head>
+<body>
+  <button id="dark-mode-toggle" title="Toggle dark mode" style="position:fixed;top:16px;right:16px;z-index:200;background:none;border:none;cursor:pointer;outline:none;">
+    <img id="dark-mode-icon" src="/assets/img/icons/dark-mode.png" alt="Toggle dark mode" width="24" height="24" style="vertical-align:middle;" />
+  </button>
+  
+  <div id="site-wrapper">
+    <button id="mobile-menu-toggle" aria-label="Open Menu">
+  <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+</button>
+
+<aside id="sidebar">
+  <div class="sidebar-header">
+    <button id="sidebar-toggle" aria-label="Toggle Sidebar">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+    </button>
+  </div>
+
+  <div class="author-box">
+    <a href="/">
+      <img src="/assets/img/prof_pic.jpg" alt="Profile Photo" class="profile-image" />
+      <h2 class="author-name">Mehmet Bozdal</h2>
+    </a>
+  </div>
+
+  <ul class="nav">
+    <li>
+      <a href="/blog/" title="Blog">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+        <span class="nav-label">Blog</span>
+      </a>
+    </li>
+    <li>
+      <a href="/projects/" title="Projects">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 2l-5.5 9h11L12 2zm0 3.84L13.93 9h-3.87L12 5.84zM17.5 13c-2.49 0-4.5 2.01-4.5 4.5s2.01 4.5 4.5 4.5 4.5-2.01 4.5-4.5-2.01-4.5-4.5-4.5zm0 7c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5zM3 21.5h8v-8H3v8zm2-6h4v4H5v-4z"/></svg>
+        <span class="nav-label">Projects</span>
+      </a>
+    </li>
+    <li>
+      <a href="/teaching/" title="Teaching">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>
+        <span class="nav-label">Teaching</span>
+      </a>
+    </li>
+    <li>
+      <a href="/publications/" title="Publications">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>
+        <span class="nav-label">Publications</span>
+      </a>
+    </li>
+  </ul>
+
+  <div class="social-icons">
+    <a href="mailto:mehmet.bozdal [at] agu.edu.tr" title="Email"><img src="/assets/img/icons/email.svg" alt="Email" width="24" height="24"></a>
+    <a href="https://www.linkedin.com/in/mbozdal/" title="LinkedIn" target="_blank"><img src="/assets/img/icons/linkedin.svg" alt="LinkedIn" width="24" height="24"></a>
+    <a href="https://scholar.google.com/citations?user=AR2tsh0AAAAJ" title="Google Scholar" target="_blank"><img src="/assets/img/icons/scholar.svg" alt="Scholar" width="24" height="24"></a>
+    <a href="https://x.com/simon_mehmet" title="Twitter" target="_blank"><img src="/assets/img/icons/twitter.svg" alt="Twitter" width="24" height="24"></a>
+    <a href="https://www.researchgate.net/profile/Mehmet-Bozdal" title="ResearchGate" target="_blank"><img src="/assets/img/icons/researchgate.svg" alt="ResearchGate" width="24" height="24"></a>
+  </div>
+</aside>
+
+<div id="sidebar-overlay"></div>
+
+<script>
+(function() {
+  const sidebar = document.getElementById('sidebar');
+  const toggle = document.getElementById('sidebar-toggle');
+  const mobileToggle = document.getElementById('mobile-menu-toggle');
+  const overlay = document.getElementById('sidebar-overlay');
+  
+  // Apply persistence
+  const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+  if (isCollapsed && window.innerWidth > 768) {
+    sidebar.classList.add('collapsed');
+  }
+  
+  // Unified toggle function
+  const toggleSidebar = () => {
+    sidebar.classList.toggle('collapsed');
+    localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+  };
+
+  toggle.addEventListener('click', toggleSidebar);
+  
+  mobileToggle.addEventListener('click', () => {
+    sidebar.classList.add('mobile-active');
+    overlay.classList.add('active');
+  });
+  
+  overlay.addEventListener('click', () => {
+    sidebar.classList.remove('mobile-active');
+    overlay.classList.remove('active');
+  });
+
+  // Highlight active link
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.nav a').forEach(link => {
+    const href = link.getAttribute('href');
+    if (href !== '/' && currentPath.startsWith(href)) {
+      link.classList.add('active');
+    } else if (href === '/' && currentPath === '/') {
+      link.classList.add('active');
+    }
+  });
+})();
+</script>
+
+
+    
+    <main id="main-content">
+      
+      
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">BEiNG-WISE Training School</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2025-09-01T00:00:00+03:00" itemprop="datePublished">Sep 1, 2025
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>I recently attended the third training school of BEiNG-WISE, “Cybersecurity and Human Factors from an Industrial and Ethical Perspective.”
+The event was fantastic, bringing together diverse disciplines under one roof.
+The key takeaway was clear: cybersecurity is not just technical, it is deeply human.
+The program included insightful discussions on psychology, ethics, and law.</p>
+
+<figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/beingwise2_08_2025.jpg" width="auto" height="auto" style="max-width: 100%; max-height: 500px;" title="BEiNG-WISE" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+
+  </picture>
+
+</figure>
+
+<p>The school began with a fascinating demo of the Flipper Zero by Marcin Czerniawski, whose contributions and questions enriched the sessions.(Thank you for the gift, Marcin.)</p>
+
+<p>Obviously, artificial intelligence was among the hottest topics, with several talks exploring its promise and challenges.
+Other sessions emphasized the importance of organizational culture, while one particularly striking presentation
+showed how attackers exploit psychology; using cognitive biases and social dynamics to manipulate victims.</p>
+
+<p>It reminded me that while technology keeps advancing, humans often remain the weakest link in the security chain.
+However, with awareness, training, and a strong cybersecurity culture, this weakness can be transformed into resilience.</p>
+
+<p>The legal dimension of cybersecurity also received strong attention. Personally, I believe legislation in both cybersecurity and AI remains
+underdeveloped. That is why BEiNG-WISE has established a dedicated working group, WP5: Legal Factors in Cybersecurity Wireless Systems: 
+A Vertical Approach, which aims to address these challenges and bridge the gap between technology and policy.</p>
+
+<p>I also had the opportunity to present our own research from the HI-ACT project, where we focus on the cybersecurity of hydrogen systems.
+My talk centered on our progress in generating benchmarking datasets for intrusion detection systems. The lack of existing labelled dataset for hydrogen
+systems impedes the development of IDS. Therefore, this work supports the development of stronger defenses against cyberattacks in clean energy infrastructure.</p>
+
+<figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/beingwise_08_2025.jpg" width="auto" height="auto" style="max-width: 100%; max-height: 500px;" title="BEiNG-WISE" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+
+  </picture>
+
+</figure>
+
+<p>This was also my first COST Action event. COST is all about networking, and it not only introduced me to leading experts from across 
+Europe but also gave me the chance to make new friends. I am truly grateful to the organizers for creating such a welcoming and inspiring environment.</p>
+
+<p>Beyond the academic sessions, the event offered a much-needed personal break. 
+Having traveled frequently for work, I was feeling exhausted, but spending time in Litochoro, Greece was both refreshing and motivating. The town’s natural beauty, combined with the intellectual energy of the school,
+provided space to recharge, reflect, and enjoy moments outside the conference.</p>
+
+<p>Overall, the BEiNG-WISE training school was a reminder that cybersecurity is a multidisciplinary effort where
+ technology, humans, and laws intersect. I left with new insights, valuable collaborations, and renewed energy for my own research journey.</p>
+
+<figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/beingwise1_08_2025.jpg" width="auto" height="auto" style="max-width: 100%; max-height: 500px;" title="BEiNG-WISE" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+
+  </picture>
+
+</figure>
+
+  </div><a class="u-url" href="/2025/09/01/beingwise.html" hidden></a>
+</article>
+
+      
+    </main>
+  </div>
+
+  <footer>
+    <div class="container">
+      &copy; 2026 Mehmet Bozdal. All rights reserved.
+      <div class="footer-note">This site is built with support of LLM.</div>
+    </div>
+  </footer>
+
+  <script>
+  (function() {
+    // Dark mode logic
+    const toggle = document.getElementById('dark-mode-toggle');
+    const icon = document.getElementById('dark-mode-icon');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    function setDarkMode(on) {
+      if(on) {
+        document.documentElement.classList.add('dark-mode');
+        icon.src = '/assets/img/icons/light-mode.png';
+        icon.alt = 'Light mode';
+        localStorage.setItem('darkMode', 'on');
+      } else {
+        document.documentElement.classList.remove('dark-mode');
+        icon.src = '/assets/img/icons/dark-mode.png';
+        icon.alt = 'Dark mode';
+        localStorage.setItem('darkMode', 'off');
+      }
+    }
+    
+    const saved = localStorage.getItem('darkMode');
+    if(saved === 'on' || (saved === null && prefersDark)) setDarkMode(true);
+    else setDarkMode(false);
+    
+    toggle.onclick = function() {
+      setDarkMode(!document.documentElement.classList.contains('dark-mode'));
+    };
+  })();
+  </script>
+</body>
+</html>

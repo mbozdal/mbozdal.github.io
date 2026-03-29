@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ page.title }}</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <script>
+    (function() {
+      try {
+        var saved = localStorage.getItem('darkMode');
+        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if(saved === 'on' || (saved === null && prefersDark)) {
+          document.documentElement.classList.add('dark-mode');
+        } else {
+          document.documentElement.classList.remove('dark-mode');
+        }
+      } catch(e) {}
+    })();
+  </script>
+</head>
+<body>
+  <button id="dark-mode-toggle" title="Toggle dark mode" style="position:fixed;top:16px;right:16px;z-index:200;background:none;border:none;cursor:pointer;outline:none;">
+    <img id="dark-mode-icon" src="/assets/img/icons/dark-mode.png" alt="Toggle dark mode" width="24" height="24" style="vertical-align:middle;" />
+  </button>
+  
+  <div id="site-wrapper">
+    {% include sidebar.html %}
+    
+    <main id="main-content">
+      {% assign stripped_content = content | strip_html | strip_newlines %}
+      {% if content and content != '' and stripped_content.size > 0 %}
+        {{ content }}
+      {% else %}
+        <div style="text-align:center; color:#aaa; font-size:1.3em; margin: 3em 0;">🚧 This page is under construction 🚧</div>
+      {% endif %}
+    </main>
+  </div>
+
+  <footer>
+    <div class="container">
+      &copy; {{ site.time | date: '%Y' }} Mehmet Bozdal. All rights reserved.
+      <div class="footer-note">This site is built with support of LLM.</div>
+    </div>
+  </footer>
+
+  <script>
+  (function() {
+    // Dark mode logic
+    const toggle = document.getElementById('dark-mode-toggle');
+    const icon = document.getElementById('dark-mode-icon');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    function setDarkMode(on) {
+      if(on) {
+        document.documentElement.classList.add('dark-mode');
+        icon.src = '/assets/img/icons/light-mode.png';
+        icon.alt = 'Light mode';
+        localStorage.setItem('darkMode', 'on');
+      } else {
+        document.documentElement.classList.remove('dark-mode');
+        icon.src = '/assets/img/icons/dark-mode.png';
+        icon.alt = 'Dark mode';
+        localStorage.setItem('darkMode', 'off');
+      }
+    }
+    
+    const saved = localStorage.getItem('darkMode');
+    if(saved === 'on' || (saved === null && prefersDark)) setDarkMode(true);
+    else setDarkMode(false);
+    
+    toggle.onclick = function() {
+      setDarkMode(!document.documentElement.classList.contains('dark-mode'));
+    };
+  })();
+  </script>
+</body>
+</html>

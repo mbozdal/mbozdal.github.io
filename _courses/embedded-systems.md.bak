@@ -1,0 +1,35 @@
+---
+layout: course
+title: "Embedded Systems"
+code: "ENGR 301 (Draft)"
+term: "Fall 2026"
+level: "Undergraduate"
+---
+
+# Embedded Systems (Draft)
+
+*This course is currently under development. Detailed content, including lecture slides and lab manuals, will be uploaded soon.*
+
+---
+
+## 📘 Course Description
+This course provides a comprehensive introduction to the design and implementation of embedded systems. Students will gain hands-on experience with popular microcontrollers, learning to interface with sensors, actuators, and communication protocols.
+
+### Key Topics
+- **Introduction to Microcontrollers**: Memory architectures, GPIO, and interrupts.
+- **Real-Time Concepts**: Task scheduling and RTOS fundamentals.
+- **Communication Protocols**: Deep dive into I2C, SPI, and UART.
+- **Embedded Security**: Secure boot and hardware-based trust.
+- **Low-Power Optimization**: Techniques for battery-powered IoT devices.
+
+---
+
+## 📂 Course Resources (Coming Soon)
+- [ ] **Syllabus**: Download PDF (TBA)
+- [ ] **Lecture 1**: Introduction to Embedded World
+- [ ] **Lab 1**: Getting Started with Cortex-M
+- [ ] **Project Guide**: Autonomous Rover Design
+
+---
+
+*For inquiries about this course, please contact the instructor.*

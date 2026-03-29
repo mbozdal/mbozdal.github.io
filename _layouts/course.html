@@ -1,0 +1,99 @@
+---
+layout: default
+---
+
+<div class="card">
+  <h1>{{ page.title }}</h1>
+
+  <div class="course-meta">
+    {% if page.code %}
+    <p><strong>Course Code:</strong> {{ page.code }}</p>
+    {% endif %}
+    
+    {% if page.term %}
+    <p><strong>Term:</strong> {{ page.term }}</p>
+    {% endif %}
+    
+    {% if page.level %}
+    <p><strong>Level:</strong> {{ page.level }}</p>
+    {% endif %}
+  </div>
+
+  <div class="course-content">
+    {{ content }}
+  </div>
+
+  {% if page.syllabus %}
+  <div class="course-section">
+    <h2>Syllabus</h2>
+    {{ page.syllabus | markdownify }}
+  </div>
+  {% endif %}
+
+  {% if page.schedule %}
+  <div class="course-section">
+    <h2>Schedule</h2>
+    <table class="schedule-table">
+      <thead>
+        <tr>
+          <th>Week</th>
+          <th>Topic</th>
+          <th>Materials</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for week in page.schedule %}
+        <tr>
+          <td>{{ week.week }}</td>
+          <td>{{ week.topic }}</td>
+          <td>
+            {% if week.materials %}
+            <ul>
+              {% for material in week.materials %}
+              <li><a href="{{ material.url }}">{{ material.name }}</a></li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+  {% if page.assignments %}
+  <div class="course-section">
+    <h2>Assignments</h2>
+    <ul>
+      {% for assignment in page.assignments %}
+      <li>
+        <strong>{{ assignment.title }}</strong>
+        {% if assignment.due_date %}
+        <br>Due: {{ assignment.due_date }}
+        {% endif %}
+        {% if assignment.description %}
+        <br>{{ assignment.description }}
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+  {% if page.resources %}
+  <div class="course-section">
+    <h2>Resources</h2>
+    <ul>
+      {% for resource in page.resources %}
+      <li>
+        <a href="{{ resource.url }}">{{ resource.name }}</a>
+        {% if resource.description %}
+        <br>{{ resource.description }}
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+</div> 

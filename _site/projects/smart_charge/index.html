@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>EV Charge Optimization</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <script>
+    (function() {
+      try {
+        var saved = localStorage.getItem('darkMode');
+        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if(saved === 'on' || (saved === null && prefersDark)) {
+          document.documentElement.classList.add('dark-mode');
+        } else {
+          document.documentElement.classList.remove('dark-mode');
+        }
+      } catch(e) {}
+    })();
+  </script>
+</head>
+<body>
+  <button id="dark-mode-toggle" title="Toggle dark mode" style="position:fixed;top:16px;right:16px;z-index:200;background:none;border:none;cursor:pointer;outline:none;">
+    <img id="dark-mode-icon" src="/assets/img/icons/dark-mode.png" alt="Toggle dark mode" width="24" height="24" style="vertical-align:middle;" />
+  </button>
+  
+  <div id="site-wrapper">
+    <button id="mobile-menu-toggle" aria-label="Open Menu">
+  <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+</button>
+
+<aside id="sidebar">
+  <div class="sidebar-header">
+    <button id="sidebar-toggle" aria-label="Toggle Sidebar">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+    </button>
+  </div>
+
+  <div class="author-box">
+    <a href="/">
+      <img src="/assets/img/prof_pic.jpg" alt="Profile Photo" class="profile-image" />
+      <h2 class="author-name">Mehmet Bozdal</h2>
+    </a>
+  </div>
+
+  <ul class="nav">
+    <li>
+      <a href="/blog/" title="Blog">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+        <span class="nav-label">Blog</span>
+      </a>
+    </li>
+    <li>
+      <a href="/projects/" title="Projects">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 2l-5.5 9h11L12 2zm0 3.84L13.93 9h-3.87L12 5.84zM17.5 13c-2.49 0-4.5 2.01-4.5 4.5s2.01 4.5 4.5 4.5 4.5-2.01 4.5-4.5-2.01-4.5-4.5-4.5zm0 7c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5zM3 21.5h8v-8H3v8zm2-6h4v4H5v-4z"/></svg>
+        <span class="nav-label">Projects</span>
+      </a>
+    </li>
+    <li>
+      <a href="/teaching/" title="Teaching">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>
+        <span class="nav-label">Teaching</span>
+      </a>
+    </li>
+    <li>
+      <a href="/publications/" title="Publications">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>
+        <span class="nav-label">Publications</span>
+      </a>
+    </li>
+  </ul>
+
+  <div class="social-icons">
+    <a href="mailto:mehmet.bozdal [at] agu.edu.tr" title="Email"><img src="/assets/img/icons/email.svg" alt="Email" width="24" height="24"></a>
+    <a href="https://www.linkedin.com/in/mbozdal/" title="LinkedIn" target="_blank"><img src="/assets/img/icons/linkedin.svg" alt="LinkedIn" width="24" height="24"></a>
+    <a href="https://scholar.google.com/citations?user=AR2tsh0AAAAJ" title="Google Scholar" target="_blank"><img src="/assets/img/icons/scholar.svg" alt="Scholar" width="24" height="24"></a>
+    <a href="https://x.com/simon_mehmet" title="Twitter" target="_blank"><img src="/assets/img/icons/twitter.svg" alt="Twitter" width="24" height="24"></a>
+    <a href="https://www.researchgate.net/profile/Mehmet-Bozdal" title="ResearchGate" target="_blank"><img src="/assets/img/icons/researchgate.svg" alt="ResearchGate" width="24" height="24"></a>
+  </div>
+</aside>
+
+<div id="sidebar-overlay"></div>
+
+<script>
+(function() {
+  const sidebar = document.getElementById('sidebar');
+  const toggle = document.getElementById('sidebar-toggle');
+  const mobileToggle = document.getElementById('mobile-menu-toggle');
+  const overlay = document.getElementById('sidebar-overlay');
+  
+  // Apply persistence
+  const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+  if (isCollapsed && window.innerWidth > 768) {
+    sidebar.classList.add('collapsed');
+  }
+  
+  // Unified toggle function
+  const toggleSidebar = () => {
+    sidebar.classList.toggle('collapsed');
+    localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+  };
+
+  toggle.addEventListener('click', toggleSidebar);
+  
+  mobileToggle.addEventListener('click', () => {
+    sidebar.classList.add('mobile-active');
+    overlay.classList.add('active');
+  });
+  
+  overlay.addEventListener('click', () => {
+    sidebar.classList.remove('mobile-active');
+    overlay.classList.remove('active');
+  });
+
+  // Highlight active link
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.nav a').forEach(link => {
+    const href = link.getAttribute('href');
+    if (href !== '/' && currentPath.startsWith(href)) {
+      link.classList.add('active');
+    } else if (href === '/' && currentPath === '/') {
+      link.classList.add('active');
+    }
+  });
+})();
+</script>
+
+
+    
+    <main id="main-content">
+      
+      
+        <div class="card">
+  <h1>EV Charge Optimization</h1>
+  
+  
+
+  <div class="project-meta">
+    
+    <p><strong>Duration:</strong> 2024-Ongoing</p>
+    
+    
+    
+    <p><strong>Team:</strong> Alper Savaşçı</p>
+    
+    
+    
+    <p><strong>Funding:</strong> </p>
+    
+
+  </div>
+
+  <div class="project-content">
+    <h2 id="project-overview">Project Overview</h2>
+
+<p>IoT-Based Smart Charging Management for Electric Vehicles is a research project aimed at optimizing
+ the charging processes of electric vehicles (EVs) in a sustainable and grid-friendly manner.
+ The rapid growth in EV adoption poses challenges for low-voltage distribution grids,
+ especially during peak demand hours. This project proposes an intelligent charging management system
+ that dynamically balances user preferences, grid conditions, and renewable energy availability.</p>
+
+<p>The system integrates Internet of Things (IoT) devices, machine learning algorithms, and real-time energy
+ data to schedule charging sessions in a way that supports energy efficiency, cost savings, and grid stability.</p>
+
+<h2 id="project-objectives">Project Objectives</h2>
+
+<ol>
+  <li>Reduce peak load on low-voltage distribution networks by optimizing EV charging schedules</li>
+  <li>Maximize the use of renewable energy in EV charging</li>
+  <li>Build a modular, scalable, and user-centric smart charging platform for real-world deployment</li>
+</ol>
+
+<h2 id="key-outputs">Key Outputs</h2>
+
+<p>This project started recently.</p>
+
+  </div>
+
+  
+</div> 
+      
+    </main>
+  </div>
+
+  <footer>
+    <div class="container">
+      &copy; 2026 Mehmet Bozdal. All rights reserved.
+      <div class="footer-note">This site is built with support of LLM.</div>
+    </div>
+  </footer>
+
+  <script>
+  (function() {
+    // Dark mode logic
+    const toggle = document.getElementById('dark-mode-toggle');
+    const icon = document.getElementById('dark-mode-icon');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    function setDarkMode(on) {
+      if(on) {
+        document.documentElement.classList.add('dark-mode');
+        icon.src = '/assets/img/icons/light-mode.png';
+        icon.alt = 'Light mode';
+        localStorage.setItem('darkMode', 'on');
+      } else {
+        document.documentElement.classList.remove('dark-mode');
+        icon.src = '/assets/img/icons/dark-mode.png';
+        icon.alt = 'Dark mode';
+        localStorage.setItem('darkMode', 'off');
+      }
+    }
+    
+    const saved = localStorage.getItem('darkMode');
+    if(saved === 'on' || (saved === null && prefersDark)) setDarkMode(true);
+    else setDarkMode(false);
+    
+    toggle.onclick = function() {
+      setDarkMode(!document.documentElement.classList.contains('dark-mode'));
+    };
+  })();
+  </script>
+</body>
+</html>

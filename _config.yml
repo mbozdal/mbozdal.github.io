@@ -1,0 +1,60 @@
+title: "Mehmet Bozdal"
+email: mbozdal [at] agu.edu.tr
+description: >-
+  Academic profile of Mehmet Bozdal.
+baseurl: ""
+url: "https://mbozdal.github.io"
+theme: minima
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-paginate
+  - jekyll-scholar
+paginate: 5
+markdown: kramdown
+
+collections:
+  projects:
+    output: true
+    permalink: /projects/:path/
+  courses:
+    output: true
+    permalink: /courses/:path/
+  publications:
+    output: true
+    permalink: /publications/:path/
+  news:
+    output: true
+    permalink: /news/:path/
+
+defaults:
+  - scope:
+      path: ""
+      type: "projects"
+    values:
+      layout: "project"
+  - scope:
+      path: ""
+      type: "courses"
+    values:
+      layout: "course"
+  - scope:
+      path: ""
+      type: "publications"
+    values:
+      layout: "publication"
+  - scope:
+      path: ""
+      type: "news"
+    values:
+      layout: "news"
+
+include:
+  - _pages
+
+scholar:
+  style: apa
+  locale: en
+  source: ./_bibliography
+  bibliography: publications.bib
+  bibliography_template: bib

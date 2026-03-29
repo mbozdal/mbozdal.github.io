@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Startup Code for Arm</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <script>
+    (function() {
+      try {
+        var saved = localStorage.getItem('darkMode');
+        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if(saved === 'on' || (saved === null && prefersDark)) {
+          document.documentElement.classList.add('dark-mode');
+        } else {
+          document.documentElement.classList.remove('dark-mode');
+        }
+      } catch(e) {}
+    })();
+  </script>
+</head>
+<body>
+  <button id="dark-mode-toggle" title="Toggle dark mode" style="position:fixed;top:16px;right:16px;z-index:200;background:none;border:none;cursor:pointer;outline:none;">
+    <img id="dark-mode-icon" src="/assets/img/icons/dark-mode.png" alt="Toggle dark mode" width="24" height="24" style="vertical-align:middle;" />
+  </button>
+  
+  <div id="site-wrapper">
+    <button id="mobile-menu-toggle" aria-label="Open Menu">
+  <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+</button>
+
+<aside id="sidebar">
+  <div class="sidebar-header">
+    <button id="sidebar-toggle" aria-label="Toggle Sidebar">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+    </button>
+  </div>
+
+  <div class="author-box">
+    <a href="/">
+      <img src="/assets/img/prof_pic.jpg" alt="Profile Photo" class="profile-image" />
+      <h2 class="author-name">Mehmet Bozdal</h2>
+    </a>
+  </div>
+
+  <ul class="nav">
+    <li>
+      <a href="/blog/" title="Blog">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+        <span class="nav-label">Blog</span>
+      </a>
+    </li>
+    <li>
+      <a href="/projects/" title="Projects">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 2l-5.5 9h11L12 2zm0 3.84L13.93 9h-3.87L12 5.84zM17.5 13c-2.49 0-4.5 2.01-4.5 4.5s2.01 4.5 4.5 4.5 4.5-2.01 4.5-4.5-2.01-4.5-4.5-4.5zm0 7c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5zM3 21.5h8v-8H3v8zm2-6h4v4H5v-4z"/></svg>
+        <span class="nav-label">Projects</span>
+      </a>
+    </li>
+    <li>
+      <a href="/teaching/" title="Teaching">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>
+        <span class="nav-label">Teaching</span>
+      </a>
+    </li>
+    <li>
+      <a href="/publications/" title="Publications">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>
+        <span class="nav-label">Publications</span>
+      </a>
+    </li>
+  </ul>
+
+  <div class="social-icons">
+    <a href="mailto:mehmet.bozdal [at] agu.edu.tr" title="Email"><img src="/assets/img/icons/email.svg" alt="Email" width="24" height="24"></a>
+    <a href="https://www.linkedin.com/in/mbozdal/" title="LinkedIn" target="_blank"><img src="/assets/img/icons/linkedin.svg" alt="LinkedIn" width="24" height="24"></a>
+    <a href="https://scholar.google.com/citations?user=AR2tsh0AAAAJ" title="Google Scholar" target="_blank"><img src="/assets/img/icons/scholar.svg" alt="Scholar" width="24" height="24"></a>
+    <a href="https://x.com/simon_mehmet" title="Twitter" target="_blank"><img src="/assets/img/icons/twitter.svg" alt="Twitter" width="24" height="24"></a>
+    <a href="https://www.researchgate.net/profile/Mehmet-Bozdal" title="ResearchGate" target="_blank"><img src="/assets/img/icons/researchgate.svg" alt="ResearchGate" width="24" height="24"></a>
+  </div>
+</aside>
+
+<div id="sidebar-overlay"></div>
+
+<script>
+(function() {
+  const sidebar = document.getElementById('sidebar');
+  const toggle = document.getElementById('sidebar-toggle');
+  const mobileToggle = document.getElementById('mobile-menu-toggle');
+  const overlay = document.getElementById('sidebar-overlay');
+  
+  // Apply persistence
+  const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+  if (isCollapsed && window.innerWidth > 768) {
+    sidebar.classList.add('collapsed');
+  }
+  
+  // Unified toggle function
+  const toggleSidebar = () => {
+    sidebar.classList.toggle('collapsed');
+    localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+  };
+
+  toggle.addEventListener('click', toggleSidebar);
+  
+  mobileToggle.addEventListener('click', () => {
+    sidebar.classList.add('mobile-active');
+    overlay.classList.add('active');
+  });
+  
+  overlay.addEventListener('click', () => {
+    sidebar.classList.remove('mobile-active');
+    overlay.classList.remove('active');
+  });
+
+  // Highlight active link
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.nav a').forEach(link => {
+    const href = link.getAttribute('href');
+    if (href !== '/' && currentPath.startsWith(href)) {
+      link.classList.add('active');
+    } else if (href === '/' && currentPath === '/') {
+      link.classList.add('active');
+    }
+  });
+})();
+</script>
+
+
+    
+    <main id="main-content">
+      
+      
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Startup Code for Arm</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2023-07-13T20:39:00+03:00" itemprop="datePublished">Jul 13, 2023
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>The startup code in an embedded system plays a vital role in initializing the hardware and setting up the execution environment upon system power-on or reset. It is typically written in assembly or C languages and executed before the main function. The startup code for the STM32F107 microcontroller, provided below, configures low-level hardware specific to the architecture.</p>
+
+<p>The startup code performs several essential tasks:</p>
+
+<ol>
+  <li>
+    <p><strong>Stack Setup:</strong></p>
+
+    <p>The provided code segment defines the stack size and allocates memory for the stack.</p>
+
+    <div class="language-nasm highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="no">Stack_Size</span><span class="kd">      EQU</span>     <span class="mh">0x00000400</span>
+    
+                 <span class="nf">AREA</span>    <span class="nv">STACK</span><span class="p">,</span> <span class="nv">NOINIT</span><span class="p">,</span> <span class="nv">READWRITE</span><span class="p">,</span> <span class="nb">AL</span><span class="nv">IGN</span><span class="err">=</span><span class="mi">3</span>
+ <span class="nf">Stack_Mem</span>       <span class="nb">SP</span><span class="nv">ACE</span>   <span class="nv">Stack_Size</span>
+ <span class="nf">__initial_sp</span>
+</code></pre></div>    </div>
+
+    <p>The <strong><code class="language-plaintext highlighter-rouge">Stack_Size</code></strong> symbolic constant is assigned a value of <strong><code class="language-plaintext highlighter-rouge">0x00000400</code></strong>, representing the stack size in hexadecimal notation. The <strong><code class="language-plaintext highlighter-rouge">AREA</code></strong> directive creates a new section called “STACK” with the attributes <strong><code class="language-plaintext highlighter-rouge">NOINIT</code></strong>, <strong><code class="language-plaintext highlighter-rouge">READWRITE</code></strong>, and <strong><code class="language-plaintext highlighter-rouge">ALIGN=3</code></strong>, indicating that the memory in this section initialized to zero, can be read from and written to, and is aligned on an 8-byte (2^3) boundary. The <strong><code class="language-plaintext highlighter-rouge">Stack_Mem</code></strong> label marks the start of the allocated memory block for the stack, and the <strong><code class="language-plaintext highlighter-rouge">SPACE</code></strong> directive reserves the specified size of memory, in this case <strong><code class="language-plaintext highlighter-rouge">1024</code></strong> bytes . Lastly, the <strong><code class="language-plaintext highlighter-rouge">__initial_sp</code></strong> label represents the initial value of the stack pointer, which is conventionally used to initialize the stack pointer.</p>
+
+    <ol>
+      <li><strong>Heap Setup:</strong></li>
+    </ol>
+
+    <p>Similar to the stack setup, the heap setup section allocates memory for the heap. The label <strong><code class="language-plaintext highlighter-rouge">__heap_base</code></strong> denotes the starting address of the allocated memory block for the heap. The <strong><code class="language-plaintext highlighter-rouge">Heap_Mem</code></strong> label is used in conjunction with the <strong><code class="language-plaintext highlighter-rouge">SPACE</code></strong> directive to reserve the specified size of memory for the heap. Additionally, the label <strong><code class="language-plaintext highlighter-rouge">__heap_limit</code></strong> is used to mark the end of the allocated heap memory.</p>
+
+    <div class="language-nasm highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="no">Heap_Size</span><span class="kd">       EQU</span>     <span class="mh">0x00000200</span>
+    
+                 <span class="nf">AREA</span>    <span class="nv">HEAP</span><span class="p">,</span> <span class="nv">NOINIT</span><span class="p">,</span> <span class="nv">READWRITE</span><span class="p">,</span> <span class="nb">AL</span><span class="nv">IGN</span><span class="err">=</span><span class="mi">3</span>
+ <span class="nf">__heap_base</span>
+ <span class="nf">Heap_Mem</span>        <span class="nb">SP</span><span class="nv">ACE</span>   <span class="nv">Heap_Size</span>
+ <span class="nf">__heap_limit</span>
+    
+                 <span class="nf">PRESERVE8</span>
+                 <span class="nf">THUMB</span>
+</code></pre></div>    </div>
+
+    <p>The <strong><code class="language-plaintext highlighter-rouge">PRESERVE8</code></strong> directive ensures that 8-byte stack alignment is maintained, while the <strong><code class="language-plaintext highlighter-rouge">THUMB</code></strong> directive sets the program execution state to Thumb mode, which is a reduced instruction set encoding used in Arm processors.</p>
+
+    <ol>
+      <li><strong>Vector Table Initialization:</strong></li>
+    </ol>
+
+    <p>The vector table initialization is a crucial part of the startup code. It creates the vector table, which stores the addresses of various interrupt service routines (ISRs) and exception handlers.</p>
+
+    <p>Each entry in the vector table is defined using the <strong><code class="language-plaintext highlighter-rouge">DCD</code></strong> directive, assigning a 32-bit address value to represent the location of the corresponding ISR in memory. The vector table begins with the stack pointer value (<strong><code class="language-plaintext highlighter-rouge">__initial_sp</code></strong>), indicating the top of the stack. It then lists various interrupt and exception handlers, such as reset, NMI, hard fault, memory management fault, bus fault, usage fault, and more. Additionally, the vector table includes entries for external interrupts like ADC, timers, UART, SPI, CAN, and others.</p>
+
+    <p>To determine the size of the vector table, the symbol <strong><code class="language-plaintext highlighter-rouge">__Vectors_Size</code></strong> is defined by subtracting the address of the start of the vector table (<strong><code class="language-plaintext highlighter-rouge">__Vectors</code></strong>) from the address of the end of the vector table (<strong><code class="language-plaintext highlighter-rouge">__Vectors_End</code></strong>).</p>
+
+    <div class="language-nasm highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="no">__Vectors_Size</span><span class="kd">  EQU</span>  <span class="nv">__Vectors_End</span> <span class="o">-</span> <span class="nv">__Vectors</span>
+    
+                 <span class="nf">AREA</span>    <span class="o">|</span><span class="nv">.text</span><span class="o">|</span><span class="p">,</span> <span class="nv">CODE</span><span class="p">,</span> <span class="nv">READONLY</span>
+</code></pre></div>    </div>
+
+    <ol>
+      <li><strong>Reset  and other Handler Functions</strong></li>
+    </ol>
+
+    <p>The reset handler routine is responsible for initializing the system after a reset or power-on. It calls the <strong><code class="language-plaintext highlighter-rouge">SystemInit</code></strong> function, which performs hardware initialization, and then transfers control to the <strong><code class="language-plaintext highlighter-rouge">__main</code></strong> function (or ENTRY directive if using assembly). The <strong><code class="language-plaintext highlighter-rouge">__main</code></strong> function serves as the entry point for the application code. By executing these steps in sequence, the reset handler ensures that the system is properly initialized before starting the main application.</p>
+
+    <div class="language-nasm highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="c1">; Reset handler</span>
+ <span class="nf">Reset_Handler</span>    <span class="nv">PROC</span>
+                  <span class="k">EXPORT</span>  <span class="nv">Reset_Handler</span>             <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+         <span class="k">IMPORT</span>  <span class="nv">SystemInit</span>
+         <span class="k">IMPORT</span>  <span class="nv">__main</span>
+                  <span class="nf">LDR</span>     <span class="nv">R0</span><span class="p">,</span> <span class="err">=</span><span class="nv">SystemInit</span>
+                  <span class="nf">BLX</span>     <span class="nv">R0</span>
+                  <span class="nf">LDR</span>     <span class="nv">R0</span><span class="p">,</span> <span class="err">=</span><span class="nv">__main</span>
+                  <span class="nf">BX</span>      <span class="nv">R0</span>
+                  <span class="nf">ENDP</span>
+</code></pre></div>    </div>
+
+    <p>The startup code sets up the necessary environment and prepares the microcontroller for the execution of user code. It initializes the stack and heap, configures the vector table, and handles the system reset. These tasks are essential for a well-organized and controlled system initialization in an ARM-based embedded system.</p>
+  </li>
+</ol>
+
+<p><strong>Further Resources:</strong></p>
+
+<p><a href="https://community.silabs.com/s/article/understand-the-gnu-assembler-startup-file-of-cortex-m4?language=en_US">Understand the GNU assembler startup file of cortex M4</a></p>
+
+<p><a href="https://www.youtube.com/watch?v=2Hm8eEHsgls&amp;ab_channel=FastbitEmbeddedBrainAcademy">Writing MCU startup file from scratch</a></p>
+
+<div class="language-nasm highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">;******************** (C) COPYRIGHT 2011 STMicroelectronics ********************</span>
+<span class="c1">;* File Name          : startup_stm32f10x_cl.s</span>
+<span class="c1">;* Author             : MCD Application Team</span>
+<span class="c1">;* Version            : V3.5.1</span>
+<span class="c1">;* Date               : 08-September-2021</span>
+<span class="c1">;* Description        : STM32F10x Connectivity line devices vector table for MDK-ARM </span>
+<span class="c1">;*                      toolchain. </span>
+<span class="c1">;*                      This module performs:</span>
+<span class="c1">;*                      - Set the initial SP</span>
+<span class="c1">;*                      - Set the initial PC == Reset_Handler</span>
+<span class="c1">;*                      - Set the vector table entries with the exceptions ISR address</span>
+<span class="c1">;*                      - Configure the clock system</span>
+<span class="c1">;*                      - Branches to __main in the C library (which eventually</span>
+<span class="c1">;*                        calls main()).</span>
+<span class="c1">;*                      After Reset the CortexM3 processor is in Thread mode,</span>
+<span class="c1">;*                      priority is Privileged, and the Stack is set to Main.</span>
+<span class="c1">;* &lt;&lt;&lt; Use Configuration Wizard in Context Menu &gt;&gt;&gt;   </span>
+<span class="c1">;*******************************************************************************</span>
+<span class="c1">;*</span>
+<span class="c1">;* Copyright (c) 2011 STMicroelectronics.</span>
+<span class="c1">;* All rights reserved.</span>
+<span class="c1">;*</span>
+<span class="c1">;* This software is licensed under terms that can be found in the LICENSE file</span>
+<span class="c1">;* in the root directory of this software component.</span>
+<span class="c1">;* If no LICENSE file comes with this software, it is provided AS-IS.</span>
+<span class="c1">;</span>
+<span class="c1">;*******************************************************************************</span>
+
+<span class="c1">; Amount of memory (in bytes) allocated for Stack</span>
+<span class="c1">; Tailor this value to your application needs</span>
+<span class="c1">; &lt;h&gt; Stack Configuration</span>
+<span class="c1">;   &lt;o&gt; Stack Size (in Bytes) &lt;0x0-0xFFFFFFFF:8&gt;</span>
+<span class="c1">; &lt;/h&gt;</span>
+
+<span class="no">Stack_Size</span><span class="kd">      EQU</span>     <span class="mh">0x00000400</span>
+
+                <span class="nf">AREA</span>    <span class="nv">STACK</span><span class="p">,</span> <span class="nv">NOINIT</span><span class="p">,</span> <span class="nv">READWRITE</span><span class="p">,</span> <span class="nb">AL</span><span class="nv">IGN</span><span class="err">=</span><span class="mi">3</span>
+<span class="nf">Stack_Mem</span>       <span class="nb">SP</span><span class="nv">ACE</span>   <span class="nv">Stack_Size</span>
+<span class="nf">__initial_sp</span>
+
+<span class="c1">; &lt;h&gt; Heap Configuration</span>
+<span class="c1">;   &lt;o&gt;  Heap Size (in Bytes) &lt;0x0-0xFFFFFFFF:8&gt;</span>
+<span class="c1">; &lt;/h&gt;</span>
+
+<span class="no">Heap_Size</span><span class="kd">       EQU</span>     <span class="mh">0x00000200</span>
+
+                <span class="nf">AREA</span>    <span class="nv">HEAP</span><span class="p">,</span> <span class="nv">NOINIT</span><span class="p">,</span> <span class="nv">READWRITE</span><span class="p">,</span> <span class="nb">AL</span><span class="nv">IGN</span><span class="err">=</span><span class="mi">3</span>
+<span class="nf">__heap_base</span>
+<span class="nf">Heap_Mem</span>        <span class="nb">SP</span><span class="nv">ACE</span>   <span class="nv">Heap_Size</span>
+<span class="nf">__heap_limit</span>
+
+                <span class="nf">PRESERVE8</span>
+                <span class="nf">THUMB</span>
+
+<span class="c1">; Vector Table Mapped to Address 0 at Reset</span>
+                <span class="nf">AREA</span>    <span class="nv">RESET</span><span class="p">,</span> <span class="nv">DATA</span><span class="p">,</span> <span class="nv">READONLY</span>
+                <span class="k">EXPORT</span>  <span class="nv">__Vectors</span>
+                <span class="k">EXPORT</span>  <span class="nv">__Vectors_End</span>
+                <span class="k">EXPORT</span>  <span class="nv">__Vectors_Size</span>
+
+<span class="nf">__Vectors</span>       <span class="nv">DCD</span>     <span class="nv">__initial_sp</span>               <span class="c1">; Top of Stack</span>
+                <span class="nf">DCD</span>     <span class="nv">Reset_Handler</span>              <span class="c1">; Reset Handler</span>
+                <span class="nf">DCD</span>     <span class="nv">NMI_Handler</span>                <span class="c1">; NMI Handler</span>
+                <span class="nf">DCD</span>     <span class="nv">HardFault_Handler</span>          <span class="c1">; Hard Fault Handler</span>
+                <span class="nf">DCD</span>     <span class="nv">MemManage_Handler</span>          <span class="c1">; MPU Fault Handler</span>
+                <span class="nf">DCD</span>     <span class="nv">BusFault_Handler</span>           <span class="c1">; Bus Fault Handler</span>
+                <span class="nf">DCD</span>     <span class="nv">UsageFault_Handler</span>         <span class="c1">; Usage Fault Handler</span>
+                <span class="nf">DCD</span>     <span class="mi">0</span>                          <span class="c1">; Reserved</span>
+                <span class="nf">DCD</span>     <span class="mi">0</span>                          <span class="c1">; Reserved</span>
+                <span class="nf">DCD</span>     <span class="mi">0</span>                          <span class="c1">; Reserved</span>
+                <span class="nf">DCD</span>     <span class="mi">0</span>                          <span class="c1">; Reserved</span>
+                <span class="nf">DCD</span>     <span class="nv">SVC_Handler</span>                <span class="c1">; SVCall Handler</span>
+                <span class="nf">DCD</span>     <span class="nv">DebugMon_Handler</span>           <span class="c1">; Debug Monitor Handler</span>
+                <span class="nf">DCD</span>     <span class="mi">0</span>                          <span class="c1">; Reserved</span>
+                <span class="nf">DCD</span>     <span class="nv">PendSV_Handler</span>             <span class="c1">; PendSV Handler</span>
+                <span class="nf">DCD</span>     <span class="nv">SysTick_Handler</span>            <span class="c1">; SysTick Handler</span>
+
+                <span class="c1">; External Interrupts</span>
+                <span class="nf">DCD</span>     <span class="nv">WWDG_IRQHandler</span>            <span class="c1">; Window Watchdog</span>
+                <span class="nf">DCD</span>     <span class="nv">PVD_IRQHandler</span>             <span class="c1">; PVD through EXTI Line detect</span>
+                <span class="nf">DCD</span>     <span class="nv">TAMPER_IRQHandler</span>          <span class="c1">; Tamper</span>
+                <span class="nf">DCD</span>     <span class="nv">RTC_IRQHandler</span>             <span class="c1">; RTC</span>
+                <span class="nf">DCD</span>     <span class="nv">FLASH_IRQHandler</span>           <span class="c1">; Flash</span>
+                <span class="nf">DCD</span>     <span class="nv">RCC_IRQHandler</span>             <span class="c1">; RCC</span>
+                <span class="nf">DCD</span>     <span class="nv">EXTI0_IRQHandler</span>           <span class="c1">; EXTI Line 0</span>
+                <span class="nf">DCD</span>     <span class="nv">EXTI1_IRQHandler</span>           <span class="c1">; EXTI Line 1</span>
+                <span class="nf">DCD</span>     <span class="nv">EXTI2_IRQHandler</span>           <span class="c1">; EXTI Line 2</span>
+                <span class="nf">DCD</span>     <span class="nv">EXTI3_IRQHandler</span>           <span class="c1">; EXTI Line 3</span>
+                <span class="nf">DCD</span>     <span class="nv">EXTI4_IRQHandler</span>           <span class="c1">; EXTI Line 4</span>
+                <span class="nf">DCD</span>     <span class="nv">DMA1_Channel1_IRQHandler</span>   <span class="c1">; DMA1 Channel 1</span>
+                <span class="nf">DCD</span>     <span class="nv">DMA1_Channel2_IRQHandler</span>   <span class="c1">; DMA1 Channel 2</span>
+                <span class="nf">DCD</span>     <span class="nv">DMA1_Channel3_IRQHandler</span>   <span class="c1">; DMA1 Channel 3</span>
+                <span class="nf">DCD</span>     <span class="nv">DMA1_Channel4_IRQHandler</span>   <span class="c1">; DMA1 Channel 4</span>
+                <span class="nf">DCD</span>     <span class="nv">DMA1_Channel5_IRQHandler</span>   <span class="c1">; DMA1 Channel 5</span>
+                <span class="nf">DCD</span>     <span class="nv">DMA1_Channel6_IRQHandler</span>   <span class="c1">; DMA1 Channel 6</span>
+                <span class="nf">DCD</span>     <span class="nv">DMA1_Channel7_IRQHandler</span>   <span class="c1">; DMA1 Channel 7</span>
+                <span class="nf">DCD</span>     <span class="nv">ADC1_2_IRQHandler</span>          <span class="c1">; ADC1 and ADC2</span>
+                <span class="nf">DCD</span>     <span class="nv">CAN1_TX_IRQHandler</span>         <span class="c1">; CAN1 TX</span>
+                <span class="nf">DCD</span>     <span class="nv">CAN1_RX0_IRQHandler</span>        <span class="c1">; CAN1 RX0</span>
+                <span class="nf">DCD</span>     <span class="nv">CAN1_RX1_IRQHandler</span>        <span class="c1">; CAN1 RX1</span>
+                <span class="nf">DCD</span>     <span class="nv">CAN1_SCE_IRQHandler</span>        <span class="c1">; CAN1 SCE</span>
+                <span class="nf">DCD</span>     <span class="nv">EXTI9_5_IRQHandler</span>         <span class="c1">; EXTI Line 9..5</span>
+                <span class="nf">DCD</span>     <span class="nv">TIM1_BRK_IRQHandler</span>        <span class="c1">; TIM1 Break</span>
+                <span class="nf">DCD</span>     <span class="nv">TIM1_UP_IRQHandler</span>         <span class="c1">; TIM1 Update</span>
+                <span class="nf">DCD</span>     <span class="nv">TIM1_TRG_COM_IRQHandler</span>    <span class="c1">; TIM1 Trigger and Commutation</span>
+                <span class="nf">DCD</span>     <span class="nv">TIM1_CC_IRQHandler</span>         <span class="c1">; TIM1 Capture Compare</span>
+                <span class="nf">DCD</span>     <span class="nv">TIM2_IRQHandler</span>            <span class="c1">; TIM2</span>
+                <span class="nf">DCD</span>     <span class="nv">TIM3_IRQHandler</span>            <span class="c1">; TIM3</span>
+                <span class="nf">DCD</span>     <span class="nv">TIM4_IRQHandler</span>            <span class="c1">; TIM4</span>
+                <span class="nf">DCD</span>     <span class="nv">I2C1_EV_IRQHandler</span>         <span class="c1">; I2C1 Event</span>
+                <span class="nf">DCD</span>     <span class="nv">I2C1_ER_IRQHandler</span>         <span class="c1">; I2C1 Error</span>
+                <span class="nf">DCD</span>     <span class="nv">I2C2_EV_IRQHandler</span>         <span class="c1">; I2C2 Event</span>
+                <span class="nf">DCD</span>     <span class="nv">I2C2_ER_IRQHandler</span>         <span class="c1">; I2C1 Error</span>
+                <span class="nf">DCD</span>     <span class="nb">SP</span><span class="nv">I1_IRQHandler</span>            <span class="c1">; SPI1</span>
+                <span class="nf">DCD</span>     <span class="nb">SP</span><span class="nv">I2_IRQHandler</span>            <span class="c1">; SPI2</span>
+                <span class="nf">DCD</span>     <span class="nv">USART1_IRQHandler</span>          <span class="c1">; USART1</span>
+                <span class="nf">DCD</span>     <span class="nv">USART2_IRQHandler</span>          <span class="c1">; USART2</span>
+                <span class="nf">DCD</span>     <span class="nv">USART3_IRQHandler</span>          <span class="c1">; USART3</span>
+                <span class="nf">DCD</span>     <span class="nv">EXTI15_10_IRQHandler</span>       <span class="c1">; EXTI Line 15..10</span>
+                <span class="nf">DCD</span>     <span class="nv">RTCAlarm_IRQHandler</span>        <span class="c1">; RTC alarm through EXTI line</span>
+                <span class="nf">DCD</span>     <span class="nv">OTG_FS_WKUP_IRQHandler</span>     <span class="c1">; USB OTG FS Wakeup through EXTI line</span>
+                <span class="nf">DCD</span>     <span class="mi">0</span>                          <span class="c1">; Reserved</span>
+                <span class="nf">DCD</span>     <span class="mi">0</span>                          <span class="c1">; Reserved</span>
+                <span class="nf">DCD</span>     <span class="mi">0</span>                          <span class="c1">; Reserved</span>
+                <span class="nf">DCD</span>     <span class="mi">0</span>                          <span class="c1">; Reserved</span>
+                <span class="nf">DCD</span>     <span class="mi">0</span>                          <span class="c1">; Reserved</span>
+                <span class="nf">DCD</span>     <span class="mi">0</span>                          <span class="c1">; Reserved</span>
+                <span class="nf">DCD</span>     <span class="mi">0</span>                          <span class="c1">; Reserved</span>
+                <span class="nf">DCD</span>     <span class="nv">TIM5_IRQHandler</span>            <span class="c1">; TIM5</span>
+                <span class="nf">DCD</span>     <span class="nb">SP</span><span class="nv">I3_IRQHandler</span>            <span class="c1">; SPI3</span>
+                <span class="nf">DCD</span>     <span class="nv">UART4_IRQHandler</span>           <span class="c1">; UART4</span>
+                <span class="nf">DCD</span>     <span class="nv">UART5_IRQHandler</span>           <span class="c1">; UART5</span>
+                <span class="nf">DCD</span>     <span class="nv">TIM6_IRQHandler</span>            <span class="c1">; TIM6</span>
+                <span class="nf">DCD</span>     <span class="nv">TIM7_IRQHandler</span>            <span class="c1">; TIM7</span>
+                <span class="nf">DCD</span>     <span class="nv">DMA2_Channel1_IRQHandler</span>   <span class="c1">; DMA2 Channel1</span>
+                <span class="nf">DCD</span>     <span class="nv">DMA2_Channel2_IRQHandler</span>   <span class="c1">; DMA2 Channel2</span>
+                <span class="nf">DCD</span>     <span class="nv">DMA2_Channel3_IRQHandler</span>   <span class="c1">; DMA2 Channel3</span>
+                <span class="nf">DCD</span>     <span class="nv">DMA2_Channel4_IRQHandler</span>   <span class="c1">; DMA2 Channel4</span>
+                <span class="nf">DCD</span>     <span class="nv">DMA2_Channel5_IRQHandler</span>   <span class="c1">; DMA2 Channel5</span>
+                <span class="nf">DCD</span>     <span class="nv">ETH_IRQHandler</span>             <span class="c1">; Ethernet</span>
+                <span class="nf">DCD</span>     <span class="nv">ETH_WKUP_IRQHandler</span>        <span class="c1">; Ethernet Wakeup through EXTI line</span>
+                <span class="nf">DCD</span>     <span class="nv">CAN2_TX_IRQHandler</span>         <span class="c1">; CAN2 TX</span>
+                <span class="nf">DCD</span>     <span class="nv">CAN2_RX0_IRQHandler</span>        <span class="c1">; CAN2 RX0</span>
+                <span class="nf">DCD</span>     <span class="nv">CAN2_RX1_IRQHandler</span>        <span class="c1">; CAN2 RX1</span>
+                <span class="nf">DCD</span>     <span class="nv">CAN2_SCE_IRQHandler</span>        <span class="c1">; CAN2 SCE</span>
+                <span class="nf">DCD</span>     <span class="nv">OTG_FS_IRQHandler</span>          <span class="c1">; USB OTG FS</span>
+<span class="nf">__Vectors_End</span>
+
+<span class="no">__Vectors_Size</span><span class="kd">  EQU</span>  <span class="nv">__Vectors_End</span> <span class="o">-</span> <span class="nv">__Vectors</span>
+
+                <span class="nf">AREA</span>    <span class="o">|</span><span class="nv">.text</span><span class="o">|</span><span class="p">,</span> <span class="nv">CODE</span><span class="p">,</span> <span class="nv">READONLY</span>
+
+<span class="c1">; Reset handler</span>
+<span class="nf">Reset_Handler</span>    <span class="nv">PROC</span>
+                 <span class="k">EXPORT</span>  <span class="nv">Reset_Handler</span>             <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+        <span class="k">IMPORT</span>  <span class="nv">SystemInit</span>
+        <span class="k">IMPORT</span>  <span class="nv">__main</span>
+                 <span class="nf">LDR</span>     <span class="nv">R0</span><span class="p">,</span> <span class="err">=</span><span class="nv">SystemInit</span>
+                 <span class="nf">BLX</span>     <span class="nv">R0</span>
+                 <span class="nf">LDR</span>     <span class="nv">R0</span><span class="p">,</span> <span class="err">=</span><span class="nv">__main</span>
+                 <span class="nf">BX</span>      <span class="nv">R0</span>
+                 <span class="nf">ENDP</span>
+
+<span class="c1">; Dummy Exception Handlers (infinite loops which can be modified)</span>
+
+<span class="nf">NMI_Handler</span>     <span class="nv">PROC</span>
+                <span class="k">EXPORT</span>  <span class="nv">NMI_Handler</span>                <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="nf">B</span>       <span class="nv">.</span>
+                <span class="nf">ENDP</span>
+<span class="nf">HardFault_Handler</span><span class="err">\</span>
+                <span class="nf">PROC</span>
+                <span class="k">EXPORT</span>  <span class="nv">HardFault_Handler</span>          <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="nf">B</span>       <span class="nv">.</span>
+                <span class="nf">ENDP</span>
+<span class="nf">MemManage_Handler</span><span class="err">\</span>
+                <span class="nf">PROC</span>
+                <span class="k">EXPORT</span>  <span class="nv">MemManage_Handler</span>          <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="nf">B</span>       <span class="nv">.</span>
+                <span class="nf">ENDP</span>
+<span class="nf">BusFault_Handler</span><span class="err">\</span>
+                <span class="nf">PROC</span>
+                <span class="k">EXPORT</span>  <span class="nv">BusFault_Handler</span>           <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="nf">B</span>       <span class="nv">.</span>
+                <span class="nf">ENDP</span>
+<span class="nf">UsageFault_Handler</span><span class="err">\</span>
+                <span class="nf">PROC</span>
+                <span class="k">EXPORT</span>  <span class="nv">UsageFault_Handler</span>         <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="nf">B</span>       <span class="nv">.</span>
+                <span class="nf">ENDP</span>
+<span class="nf">SVC_Handler</span>     <span class="nv">PROC</span>
+                <span class="k">EXPORT</span>  <span class="nv">SVC_Handler</span>                <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="nf">B</span>       <span class="nv">.</span>
+                <span class="nf">ENDP</span>
+<span class="nf">DebugMon_Handler</span><span class="err">\</span>
+                <span class="nf">PROC</span>
+                <span class="k">EXPORT</span>  <span class="nv">DebugMon_Handler</span>           <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="nf">B</span>       <span class="nv">.</span>
+                <span class="nf">ENDP</span>
+<span class="nf">PendSV_Handler</span>  <span class="nv">PROC</span>
+                <span class="k">EXPORT</span>  <span class="nv">PendSV_Handler</span>             <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="nf">B</span>       <span class="nv">.</span>
+                <span class="nf">ENDP</span>
+<span class="nf">SysTick_Handler</span> <span class="nv">PROC</span>
+                <span class="k">EXPORT</span>  <span class="nv">SysTick_Handler</span>            <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="nf">B</span>       <span class="nv">.</span>
+                <span class="nf">ENDP</span>
+
+<span class="nf">Default_Handler</span> <span class="nv">PROC</span>
+
+                <span class="k">EXPORT</span>  <span class="nv">WWDG_IRQHandler</span>            <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">PVD_IRQHandler</span>             <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">TAMPER_IRQHandler</span>          <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">RTC_IRQHandler</span>             <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">FLASH_IRQHandler</span>           <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">RCC_IRQHandler</span>             <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">EXTI0_IRQHandler</span>           <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">EXTI1_IRQHandler</span>           <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">EXTI2_IRQHandler</span>           <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">EXTI3_IRQHandler</span>           <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">EXTI4_IRQHandler</span>           <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">DMA1_Channel1_IRQHandler</span>   <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">DMA1_Channel2_IRQHandler</span>   <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">DMA1_Channel3_IRQHandler</span>   <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">DMA1_Channel4_IRQHandler</span>   <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">DMA1_Channel5_IRQHandler</span>   <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">DMA1_Channel6_IRQHandler</span>   <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">DMA1_Channel7_IRQHandler</span>   <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">ADC1_2_IRQHandler</span>          <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">CAN1_TX_IRQHandler</span>         <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">CAN1_RX0_IRQHandler</span>        <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">CAN1_RX1_IRQHandler</span>        <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">CAN1_SCE_IRQHandler</span>        <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">EXTI9_5_IRQHandler</span>         <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">TIM1_BRK_IRQHandler</span>        <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">TIM1_UP_IRQHandler</span>         <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">TIM1_TRG_COM_IRQHandler</span>    <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">TIM1_CC_IRQHandler</span>         <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">TIM2_IRQHandler</span>            <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">TIM3_IRQHandler</span>            <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">TIM4_IRQHandler</span>            <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">I2C1_EV_IRQHandler</span>         <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">I2C1_ER_IRQHandler</span>         <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">I2C2_EV_IRQHandler</span>         <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">I2C2_ER_IRQHandler</span>         <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nb">SP</span><span class="nv">I1_IRQHandler</span>            <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nb">SP</span><span class="nv">I2_IRQHandler</span>            <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">USART1_IRQHandler</span>          <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">USART2_IRQHandler</span>          <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">USART3_IRQHandler</span>          <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">EXTI15_10_IRQHandler</span>       <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">RTCAlarm_IRQHandler</span>        <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">OTG_FS_WKUP_IRQHandler</span>     <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">TIM5_IRQHandler</span>            <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nb">SP</span><span class="nv">I3_IRQHandler</span>            <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">UART4_IRQHandler</span>           <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">UART5_IRQHandler</span>           <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">TIM6_IRQHandler</span>            <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">TIM7_IRQHandler</span>            <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">DMA2_Channel1_IRQHandler</span>   <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">DMA2_Channel2_IRQHandler</span>   <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">DMA2_Channel3_IRQHandler</span>   <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">DMA2_Channel4_IRQHandler</span>   <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">DMA2_Channel5_IRQHandler</span>   <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">ETH_IRQHandler</span>             <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">ETH_WKUP_IRQHandler</span>        <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">CAN2_TX_IRQHandler</span>         <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">CAN2_RX0_IRQHandler</span>        <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">CAN2_RX1_IRQHandler</span>        <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">CAN2_SCE_IRQHandler</span>        <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+                <span class="k">EXPORT</span>  <span class="nv">OTG_FS_IRQHandler</span>          <span class="p">[</span><span class="nv">WEAK</span><span class="p">]</span>
+
+<span class="nf">WWDG_IRQHandler</span>
+<span class="nf">PVD_IRQHandler</span>
+<span class="nf">TAMPER_IRQHandler</span>
+<span class="nf">RTC_IRQHandler</span>
+<span class="nf">FLASH_IRQHandler</span>
+<span class="nf">RCC_IRQHandler</span>
+<span class="nf">EXTI0_IRQHandler</span>
+<span class="nf">EXTI1_IRQHandler</span>
+<span class="nf">EXTI2_IRQHandler</span>
+<span class="nf">EXTI3_IRQHandler</span>
+<span class="nf">EXTI4_IRQHandler</span>
+<span class="nf">DMA1_Channel1_IRQHandler</span>
+<span class="nf">DMA1_Channel2_IRQHandler</span>
+<span class="nf">DMA1_Channel3_IRQHandler</span>
+<span class="nf">DMA1_Channel4_IRQHandler</span>
+<span class="nf">DMA1_Channel5_IRQHandler</span>
+<span class="nf">DMA1_Channel6_IRQHandler</span>
+<span class="nf">DMA1_Channel7_IRQHandler</span>
+<span class="nf">ADC1_2_IRQHandler</span>
+<span class="nf">CAN1_TX_IRQHandler</span>
+<span class="nf">CAN1_RX0_IRQHandler</span>
+<span class="nf">CAN1_RX1_IRQHandler</span>
+<span class="nf">CAN1_SCE_IRQHandler</span>
+<span class="nf">EXTI9_5_IRQHandler</span>
+<span class="nf">TIM1_BRK_IRQHandler</span>
+<span class="nf">TIM1_UP_IRQHandler</span>
+<span class="nf">TIM1_TRG_COM_IRQHandler</span>
+<span class="nf">TIM1_CC_IRQHandler</span>
+<span class="nf">TIM2_IRQHandler</span>
+<span class="nf">TIM3_IRQHandler</span>
+<span class="nf">TIM4_IRQHandler</span>
+<span class="nf">I2C1_EV_IRQHandler</span>
+<span class="nf">I2C1_ER_IRQHandler</span>
+<span class="nf">I2C2_EV_IRQHandler</span>
+<span class="nf">I2C2_ER_IRQHandler</span>
+<span class="nf">SPI1_IRQHandler</span>
+<span class="nf">SPI2_IRQHandler</span>
+<span class="nf">USART1_IRQHandler</span>
+<span class="nf">USART2_IRQHandler</span>
+<span class="nf">USART3_IRQHandler</span>
+<span class="nf">EXTI15_10_IRQHandler</span>
+<span class="nf">RTCAlarm_IRQHandler</span>
+<span class="nf">OTG_FS_WKUP_IRQHandler</span>
+<span class="nf">TIM5_IRQHandler</span>
+<span class="nf">SPI3_IRQHandler</span>
+<span class="nf">UART4_IRQHandler</span>
+<span class="nf">UART5_IRQHandler</span>
+<span class="nf">TIM6_IRQHandler</span>
+<span class="nf">TIM7_IRQHandler</span>
+<span class="nf">DMA2_Channel1_IRQHandler</span>
+<span class="nf">DMA2_Channel2_IRQHandler</span>
+<span class="nf">DMA2_Channel3_IRQHandler</span>
+<span class="nf">DMA2_Channel4_IRQHandler</span>
+<span class="nf">DMA2_Channel5_IRQHandler</span>
+<span class="nf">ETH_IRQHandler</span>
+<span class="nf">ETH_WKUP_IRQHandler</span>
+<span class="nf">CAN2_TX_IRQHandler</span>
+<span class="nf">CAN2_RX0_IRQHandler</span>
+<span class="nf">CAN2_RX1_IRQHandler</span>
+<span class="nf">CAN2_SCE_IRQHandler</span>
+<span class="nf">OTG_FS_IRQHandler</span>
+
+                <span class="nf">B</span>       <span class="nv">.</span>
+
+                <span class="nf">ENDP</span>
+
+                <span class="k">ALIGN</span>
+
+<span class="c1">;*******************************************************************************</span>
+<span class="c1">; User Stack and Heap initialization</span>
+<span class="c1">;*******************************************************************************</span>
+                 <span class="nf">IF</span>      <span class="p">:</span><span class="nv">DEF</span><span class="p">:</span><span class="nv">__MICROLIB</span>
+                
+                 <span class="k">EXPORT</span>  <span class="nv">__initial_sp</span>
+                 <span class="k">EXPORT</span>  <span class="nv">__heap_base</span>
+                 <span class="k">EXPORT</span>  <span class="nv">__heap_limit</span>
+                
+                 <span class="nf">ELSE</span>
+                
+                 <span class="k">IMPORT</span>  <span class="nv">__use_two_region_memory</span>
+                 <span class="k">EXPORT</span>  <span class="nv">__user_initial_stackheap</span>
+                 
+<span class="nf">__user_initial_stackheap</span>
+
+                 <span class="nf">LDR</span>     <span class="nv">R0</span><span class="p">,</span> <span class="err">=</span>  <span class="nv">Heap_Mem</span>
+                 <span class="nf">LDR</span>     <span class="nv">R1</span><span class="p">,</span> <span class="err">=</span><span class="p">(</span><span class="nv">Stack_Mem</span> <span class="o">+</span> <span class="nv">Stack_Size</span><span class="p">)</span>
+                 <span class="nf">LDR</span>     <span class="nv">R2</span><span class="p">,</span> <span class="err">=</span> <span class="p">(</span><span class="nv">Heap_Mem</span> <span class="o">+</span>  <span class="nv">Heap_Size</span><span class="p">)</span>
+                 <span class="nf">LDR</span>     <span class="nv">R3</span><span class="p">,</span> <span class="err">=</span> <span class="nv">Stack_Mem</span>
+                 <span class="nf">BX</span>      <span class="nv">LR</span>
+
+                 <span class="k">ALIGN</span>
+
+                 <span class="nf">ENDIF</span>
+
+                 <span class="nf">END</span>
+</code></pre></div></div>
+
+  </div><a class="u-url" href="/2023/07/13/startup.html" hidden></a>
+</article>
+
+      
+    </main>
+  </div>
+
+  <footer>
+    <div class="container">
+      &copy; 2026 Mehmet Bozdal. All rights reserved.
+      <div class="footer-note">This site is built with support of LLM.</div>
+    </div>
+  </footer>
+
+  <script>
+  (function() {
+    // Dark mode logic
+    const toggle = document.getElementById('dark-mode-toggle');
+    const icon = document.getElementById('dark-mode-icon');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    function setDarkMode(on) {
+      if(on) {
+        document.documentElement.classList.add('dark-mode');
+        icon.src = '/assets/img/icons/light-mode.png';
+        icon.alt = 'Light mode';
+        localStorage.setItem('darkMode', 'on');
+      } else {
+        document.documentElement.classList.remove('dark-mode');
+        icon.src = '/assets/img/icons/dark-mode.png';
+        icon.alt = 'Dark mode';
+        localStorage.setItem('darkMode', 'off');
+      }
+    }
+    
+    const saved = localStorage.getItem('darkMode');
+    if(saved === 'on' || (saved === null && prefersDark)) setDarkMode(true);
+    else setDarkMode(false);
+    
+    toggle.onclick = function() {
+      setDarkMode(!document.documentElement.classList.contains('dark-mode'));
+    };
+  })();
+  </script>
+</body>
+</html>

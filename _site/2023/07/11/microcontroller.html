@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>What is a microcontroller?</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <script>
+    (function() {
+      try {
+        var saved = localStorage.getItem('darkMode');
+        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if(saved === 'on' || (saved === null && prefersDark)) {
+          document.documentElement.classList.add('dark-mode');
+        } else {
+          document.documentElement.classList.remove('dark-mode');
+        }
+      } catch(e) {}
+    })();
+  </script>
+</head>
+<body>
+  <button id="dark-mode-toggle" title="Toggle dark mode" style="position:fixed;top:16px;right:16px;z-index:200;background:none;border:none;cursor:pointer;outline:none;">
+    <img id="dark-mode-icon" src="/assets/img/icons/dark-mode.png" alt="Toggle dark mode" width="24" height="24" style="vertical-align:middle;" />
+  </button>
+  
+  <div id="site-wrapper">
+    <button id="mobile-menu-toggle" aria-label="Open Menu">
+  <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+</button>
+
+<aside id="sidebar">
+  <div class="sidebar-header">
+    <button id="sidebar-toggle" aria-label="Toggle Sidebar">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+    </button>
+  </div>
+
+  <div class="author-box">
+    <a href="/">
+      <img src="/assets/img/prof_pic.jpg" alt="Profile Photo" class="profile-image" />
+      <h2 class="author-name">Mehmet Bozdal</h2>
+    </a>
+  </div>
+
+  <ul class="nav">
+    <li>
+      <a href="/blog/" title="Blog">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+        <span class="nav-label">Blog</span>
+      </a>
+    </li>
+    <li>
+      <a href="/projects/" title="Projects">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 2l-5.5 9h11L12 2zm0 3.84L13.93 9h-3.87L12 5.84zM17.5 13c-2.49 0-4.5 2.01-4.5 4.5s2.01 4.5 4.5 4.5 4.5-2.01 4.5-4.5-2.01-4.5-4.5-4.5zm0 7c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5zM3 21.5h8v-8H3v8zm2-6h4v4H5v-4z"/></svg>
+        <span class="nav-label">Projects</span>
+      </a>
+    </li>
+    <li>
+      <a href="/teaching/" title="Teaching">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>
+        <span class="nav-label">Teaching</span>
+      </a>
+    </li>
+    <li>
+      <a href="/publications/" title="Publications">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>
+        <span class="nav-label">Publications</span>
+      </a>
+    </li>
+  </ul>
+
+  <div class="social-icons">
+    <a href="mailto:mehmet.bozdal [at] agu.edu.tr" title="Email"><img src="/assets/img/icons/email.svg" alt="Email" width="24" height="24"></a>
+    <a href="https://www.linkedin.com/in/mbozdal/" title="LinkedIn" target="_blank"><img src="/assets/img/icons/linkedin.svg" alt="LinkedIn" width="24" height="24"></a>
+    <a href="https://scholar.google.com/citations?user=AR2tsh0AAAAJ" title="Google Scholar" target="_blank"><img src="/assets/img/icons/scholar.svg" alt="Scholar" width="24" height="24"></a>
+    <a href="https://x.com/simon_mehmet" title="Twitter" target="_blank"><img src="/assets/img/icons/twitter.svg" alt="Twitter" width="24" height="24"></a>
+    <a href="https://www.researchgate.net/profile/Mehmet-Bozdal" title="ResearchGate" target="_blank"><img src="/assets/img/icons/researchgate.svg" alt="ResearchGate" width="24" height="24"></a>
+  </div>
+</aside>
+
+<div id="sidebar-overlay"></div>
+
+<script>
+(function() {
+  const sidebar = document.getElementById('sidebar');
+  const toggle = document.getElementById('sidebar-toggle');
+  const mobileToggle = document.getElementById('mobile-menu-toggle');
+  const overlay = document.getElementById('sidebar-overlay');
+  
+  // Apply persistence
+  const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+  if (isCollapsed && window.innerWidth > 768) {
+    sidebar.classList.add('collapsed');
+  }
+  
+  // Unified toggle function
+  const toggleSidebar = () => {
+    sidebar.classList.toggle('collapsed');
+    localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+  };
+
+  toggle.addEventListener('click', toggleSidebar);
+  
+  mobileToggle.addEventListener('click', () => {
+    sidebar.classList.add('mobile-active');
+    overlay.classList.add('active');
+  });
+  
+  overlay.addEventListener('click', () => {
+    sidebar.classList.remove('mobile-active');
+    overlay.classList.remove('active');
+  });
+
+  // Highlight active link
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.nav a').forEach(link => {
+    const href = link.getAttribute('href');
+    if (href !== '/' && currentPath.startsWith(href)) {
+      link.classList.add('active');
+    } else if (href === '/' && currentPath === '/') {
+      link.classList.add('active');
+    }
+  });
+})();
+</script>
+
+
+    
+    <main id="main-content">
+      
+      
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">What is a microcontroller?</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2023-07-11T20:39:00+03:00" itemprop="datePublished">Jul 11, 2023
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>A microcontroller, often abbreviated as MCU, is a compact computer system integrated into a single chip. It combines various components, including a central processing unit (CPU), memory, and input/output peripherals, into a small and efficient package.</p>
+
+<p><strong>Figure 1.</strong> <em>System architecture of STM32F1x Series</em></p>
+
+<figure>
+
+  <picture>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/system_architecture_stm32.png" width="auto" height="auto" style="max-width: 100%; max-height: 500px;" title="System architecture of STM32F1x Series" onerror="this.onerror=null; $('.responsive-img-srcset').remove();" />
+
+  </picture>
+
+</figure>
+
+<p>Figure 1 shows the system architecture of STM321x family MCUs, the one we will use in the labs. Check the following components in the architecture.</p>
+
+<p><strong>Components of a Microcontroller:</strong></p>
+
+<ol>
+  <li><strong>CPU:</strong> At the heart of the microcontroller is the central processing unit (CPU), which executes instructions and performs calculations. The CPU is responsible for the overall control and operation of the microcontroller.  STM321x series has Arm Cortex-M3 processors.</li>
+  <li><strong>Clock Source:</strong> A microcontroller needs  the clock signal for synchronization and timing of operations within the microcontroller (it may have a built-in oscillator). The clock source determines the speed at which the CPU and other components operate. There are various clock sources you can configure under Reset &amp; Clock Control subsystem.</li>
+  <li><strong>Memory:</strong> Microcontrollers typically include two types of memory. The <strong>flash memory</strong> holds the program code, often in the range of kilobytes to megabytes, which is non-volatile, meaning it retains the code even when power is removed. The <strong>RAM (Random Access Memory)</strong> provides temporary storage for data and variables during program execution. Cortex-M3 has Harvard architecture which allows the processor to access the data memory and the instruction memory concurrently.</li>
+  <li><strong>Input/Output (I/O) Peripherals:</strong> Microcontrollers feature a variety of I/O peripherals that facilitate communication with the external world. These peripherals include digital input/output (I/O) pins, analog-to-digital converters (ADCs) for reading analog signals, digital-to-analog converters (DACs) for generating analog output, timers for timing operations, and special digital lines such as pulse-width modulation (PWM) for controlling devices like motors or LEDs.</li>
+  <li><strong>Communication Interfaces:</strong> Microcontrollers offer communication interfaces to interact with other devices, sensors, and actuators. These interfaces include Universal Serial Bus (USB), Universal Asynchronous Receiver-Transmitter (UART), Serial Peripheral Interface (SPI), Controller Area Network (CAN), Ethernet, and wireless protocols like Wi-Fi and Bluetooth.</li>
+</ol>
+
+<p><strong>Programming Microcontrollers:</strong></p>
+
+<p>Microcontrollers are programmed to execute a set of instructions, commonly referred to as firmware. This firmware guides the microcontroller’s behavior and controls its various functions. Unlike general-purpose computers, microcontrollers often operate without an operating system and run the firmware directly in a bare-metal environment.</p>
+
+<p>Developers typically write firmware in programming languages such as C/C++ or assembly language. They utilize specialized development tools running on a host computer, which includes a compiler to convert the code into machine language, a hardware tool (programmer) to transfer the firmware into the microcontroller’s flash memory, and an optional in-circuit debugger for testing and debugging.</p>
+
+<p>Upon power-up, the microcontroller begins executing the firmware from the main() function, initializing the system and performing the programmed tasks.</p>
+
+<p><strong>Applications of Microcontrollers:</strong></p>
+
+<p>Microcontrollers find applications in various fields, including consumer electronics, industrial automation, automotive systems, medical devices, and Internet of Things (IoT) devices. They provide the necessary intelligence and control to these devices, enabling them to perform specific functions reliably and efficiently.</p>
+
+<p>In conclusion, microcontrollers serve as the core processing unit in countless electronic devices, offering a combination of CPU, memory, and peripheral functionalities. Their compact size, low power consumption, and versatility make them an essential component for embedded systems and enable the development of innovative and intelligent electronic devices.</p>
+
+<p><strong>Additional Resources:</strong></p>
+
+<p><a href="https://www.nxp.com/files-static/microcontrollers/doc/ref_manual/M68HC05TB.pdf">M68HC05 Family - Understanding Small Microcontrollers</a></p>
+
+  </div><a class="u-url" href="/2023/07/11/microcontroller.html" hidden></a>
+</article>
+
+      
+    </main>
+  </div>
+
+  <footer>
+    <div class="container">
+      &copy; 2026 Mehmet Bozdal. All rights reserved.
+      <div class="footer-note">This site is built with support of LLM.</div>
+    </div>
+  </footer>
+
+  <script>
+  (function() {
+    // Dark mode logic
+    const toggle = document.getElementById('dark-mode-toggle');
+    const icon = document.getElementById('dark-mode-icon');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    function setDarkMode(on) {
+      if(on) {
+        document.documentElement.classList.add('dark-mode');
+        icon.src = '/assets/img/icons/light-mode.png';
+        icon.alt = 'Light mode';
+        localStorage.setItem('darkMode', 'on');
+      } else {
+        document.documentElement.classList.remove('dark-mode');
+        icon.src = '/assets/img/icons/dark-mode.png';
+        icon.alt = 'Dark mode';
+        localStorage.setItem('darkMode', 'off');
+      }
+    }
+    
+    const saved = localStorage.getItem('darkMode');
+    if(saved === 'on' || (saved === null && prefersDark)) setDarkMode(true);
+    else setDarkMode(false);
+    
+    toggle.onclick = function() {
+      setDarkMode(!document.documentElement.classList.contains('dark-mode'));
+    };
+  })();
+  </script>
+</body>
+</html>
