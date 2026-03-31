@@ -3,7 +3,6 @@ layout: project
 title: "Secure Hydrogen Systems Project"
 status: "current"
 duration: "2024-Ongoing"
-team: "University of Birmingham, Multiple Partners"
 funding: "EPSRC"
 links:
   - name: "HI-ACT Website"
@@ -40,6 +39,15 @@ As a **Research Fellow**, my responsibilities include:
 ## Key Outputs
 
 - [Benchmarking Datasets for Hydrogen Energy Systems](https://github.com/mbozdal/simcity)
+
+- **Digital Transformation of Energy Systems: Technologies, Data, Governance and Cyber Security**  
+  *Authors:* Zoya Pourmirza, Mehmet Bozdal, Mohamad Khalil, Emily Judson, Sara Walker
+  *Publication:* IET Smart Grid, 2026
+
+
+- **Enhancing Cybersecurity in Hydrogen Energy Systems: A Simulation Environment for Benchmarking Datasets**  
+  *Authors:* Mehmet Bozdal, Zoya Pourmirza  
+  *Publication:* IEEE 13th International Conference on Smart Energy Grid Engineering (SEGE), 2025
 
 - **Cyber Threats to Green Hydrogen Production within a Solar Microgrid**  
   *Authors:* Mehmet Bozdal, Zoya Pourmirza  

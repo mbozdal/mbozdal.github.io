@@ -2,9 +2,8 @@
 layout: project
 title: "EV Charge Optimization"
 status: "current"
-duration: "2024-Ongoing"
-team: "Alper Savaşçı"
-funding: ""
+duration: "2025-Ongoing"
+funding: "AGÜ BAP(Scientific Research Projects)"
 links:
 ---
 
@@ -29,5 +28,4 @@ The system integrates Internet of Things (IoT) devices, machine learning algorit
 
 
 ## Key Outputs
-
-This project started recently. 
+Will be updated. 

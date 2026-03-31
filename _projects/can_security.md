@@ -29,3 +29,6 @@ During my PhD, I explored several topics before finally focusing on the security
 
 - **Temporal Logic-Based Intrusion Detection for Securing Connected Vehicles**  
   Introduces an IDS based on signal timing and logic rules, designed to detect attacks with low resource usage in embedded systems.
+
+- **Comparative analysis of dimensionality reduction techniques for cybersecurity in the SWaT dataset**  
+  
